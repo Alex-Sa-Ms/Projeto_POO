@@ -32,7 +32,6 @@ public abstract class Jogador {
 
     public Jogador(String nome, int velocidade,int resistencia,int destreza,int impulsao,int jogo_de_cabeca,int remate,int passe,List<String> historial_clubes) {
         this.nome             = nome;
-        this.pontuacao_geral  = 0;
         this.velocidade       = velocidade;
         this.resistencia      = resistencia;
         this.destreza         = destreza;
@@ -146,14 +145,14 @@ public abstract class Jogador {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("Name: ").append(this.nome).append("\n")
-          .append(" Velocidade: ").append(this.velocidade).append("\n")
-          .append(" Resistência: ").append(this.resistencia).append("\n")
-          .append(" Destreza: ").append(this.destreza).append("\n")
-          .append(" Impulsão: ").append(this.impulsao).append("\n")
-          .append(" Jogo de Cabeça: ").append(this.jogo_de_cabeca).append("\n")
-          .append(" Remate: ").append(this.remate).append("\n")
-          .append(" Passe: ").append(this.passe).append("\n")
-          .append(" Historial de Clubes ").append(this.historial_clubes.toString()).append("\n");
+          .append("Velocidade: ").append(this.velocidade).append("\n")
+          .append("Resistência: ").append(this.resistencia).append("\n")
+          .append("Destreza: ").append(this.destreza).append("\n")
+          .append("Impulsão: ").append(this.impulsao).append("\n")
+          .append("Jogo de Cabeça: ").append(this.jogo_de_cabeca).append("\n")
+          .append("Remate: ").append(this.remate).append("\n")
+          .append("Passe: ").append(this.passe).append("\n")
+          .append("Historial de Clubes: ").append(this.historial_clubes.toString()).append("\n");
         return sb.toString();
     }
 
