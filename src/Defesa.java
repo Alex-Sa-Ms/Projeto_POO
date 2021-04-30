@@ -93,4 +93,8 @@ public class Defesa extends Jogador{
                 this.getCorte()    == def.getCorte()  &&
                 this.getMarcacao() == def.getMarcacao();
     }
+
+    public int calculaPontuacaoGeral() {
+        return 0;
+    }
 }

@@ -68,4 +68,8 @@ public class Lateral extends Jogador{
                 this.getDrible()     == ll.getDrible();
     }
 
+
+    public int calculaPontuacaoGeral() {
+        return 0;
+    }
 }

@@ -97,6 +97,8 @@ public abstract class Jogador {
         return this.historial_clubes.stream().collect(Collectors.toList());
     }
 
+    public String getCurrentClub(){ return this.historial_clubes.get(this.historial_clubes.size()); }
+
 
     //Sets
 
@@ -104,7 +106,7 @@ public abstract class Jogador {
         this.nome = nome;
     }
 
-    public abstract void setPontuacaoGeral();
+    public void setPontuacaoGeral(){ this.pontuacao_geral = this.calculaPontuacaoGeral(); }
 
     public void setVelocidade(int velocidade){
         this.velocidade = velocidade;
@@ -137,6 +139,14 @@ public abstract class Jogador {
     public void setHistorialClubes(List<String> historial_clubes){
         this.historial_clubes = historial_clubes.stream().collect(Collectors.toList());
     }
+
+    /* Adiciona o nome do novo clube no fim do historial de clubes.*/
+    public void setNewCurrentClub(String clubName){
+        this.historial_clubes.add(clubName);
+    }
+
+    /* Calcula a pontuação geral de um jogador em função da sua classe */
+    public abstract int calculaPontuacaoGeral();
 
     //clone
     public abstract Jogador clone();
@@ -172,4 +182,5 @@ public abstract class Jogador {
                 this.getPasse()          == jog.getPasse()          &&
                 this.getHistorialClubes().equals(jog.getHistorialClubes());
     }
+
 }

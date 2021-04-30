@@ -95,4 +95,8 @@ public class Avancado extends Jogador {
                 this.getEfeito()         == gr.getEfeito()      &&
                 this.getPosicionamento() == gr.getPosicionamento();
     }
+
+    public int calculaPontuacaoGeral() {
+        return 0;
+    }
 }

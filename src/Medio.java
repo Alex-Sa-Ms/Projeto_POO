@@ -67,4 +67,9 @@ public class Medio extends Jogador{
         return  this.getIntercecao() == md.getIntercecao() &&
                 this.getVisao()      == md.getVisao();
     }
+
+
+    public int calculaPontuacaoGeral() {
+        return 0;
+    }
 }
