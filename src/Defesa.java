@@ -16,8 +16,8 @@ public class Defesa extends Jogador{
         this.marcacao = 0;
     }
 
-    public Defesa(String nome, int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeca, int remate, int passe, List<String> historial_clubes, int defesa, int forca, int corte, int marcacao){
-        super(nome, velocidade, resistencia, destreza, impulsao, jogo_de_cabeca, remate, passe, historial_clubes);
+    public Defesa(String nome, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int defesa, int forca, int corte, int marcacao){
+        super(nome, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
         this.defesa   = defesa;
         this.forca    = forca;
         this.corte    = corte;

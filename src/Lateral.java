@@ -12,8 +12,8 @@ public class Lateral extends Jogador{
         this.drible     = 0;
     }
 
-    public Lateral(String nome, int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeca, int remate, int passe, List<String> historial_clubes, int cruzamento, int drible){
-        super(nome, velocidade, resistencia, destreza, impulsao, jogo_de_cabeca, remate, passe, historial_clubes);
+    public Lateral(String nome, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int cruzamento, int drible){
+        super(nome, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
         this.cruzamento = cruzamento;
         this.drible     = drible;
     }

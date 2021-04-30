@@ -2,7 +2,7 @@ import java.util.List;
 
 public class GuardaRedes extends Jogador{
     private int elasticidade;
-    private int jogo_de_maos;
+    private int jogoDeMaos;
     private int reflexos;
     private int mergulho;
 
@@ -12,15 +12,15 @@ public class GuardaRedes extends Jogador{
     public GuardaRedes(){
         super();
         this.elasticidade = 0;
-        this.jogo_de_maos = 0;
+        this.jogoDeMaos = 0;
         this.reflexos     = 0;
         this.mergulho     = 0;
     }
 
-    public GuardaRedes(String nome, int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeca, int remate, int passe, List<String> historial_clubes, int elasticidade, int jogo_de_maos, int reflexos, int mergulho){
-        super(nome, velocidade, resistencia, destreza, impulsao, jogo_de_cabeca, remate, passe, historial_clubes);
+    public GuardaRedes(String nome, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int elasticidade, int jogoDeMaos, int reflexos, int mergulho){
+        super(nome, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
         this.elasticidade = elasticidade;
-        this.jogo_de_maos = jogo_de_maos;
+        this.jogoDeMaos   = jogoDeMaos;
         this.reflexos     = reflexos;
         this.mergulho     = mergulho;
     }
@@ -28,7 +28,7 @@ public class GuardaRedes extends Jogador{
     public GuardaRedes(GuardaRedes gr){
         super(gr);
         this.elasticidade = gr.getElasticidade();
-        this.jogo_de_maos = gr.getJogoDeMaos();
+        this.jogoDeMaos   = gr.getJogoDeMaos();
         this.reflexos     = gr.getReflexos();
         this.mergulho     = gr.getMergulho();
     }
@@ -41,7 +41,7 @@ public class GuardaRedes extends Jogador{
     }
 
     public int getJogoDeMaos(){
-        return this.jogo_de_maos;
+        return this.jogoDeMaos;
     }
 
     public int getReflexos(){
@@ -59,8 +59,8 @@ public class GuardaRedes extends Jogador{
         this.elasticidade = elasticidade;
     }
 
-    public void setJogoDeMaos(int jogo_de_maos){
-        this.jogo_de_maos = jogo_de_maos;
+    public void setJogoDeMaos(int jogoDeMaos){
+        this.jogoDeMaos = jogoDeMaos;
     }
 
     public void setReflexos(int reflexos){
@@ -81,7 +81,7 @@ public class GuardaRedes extends Jogador{
         StringBuilder sb = new StringBuilder();
         sb.append(super.toString())
           .append("Elasticidade: ").append(this.elasticidade).append("\n")
-          .append("Jogo de Maos: ").append(this.jogo_de_maos).append("\n")
+          .append("Jogo de Maos: ").append(this.jogoDeMaos).append("\n")
           .append("Reflexos: ").append(this.reflexos).append("\n")
           .append("Mergulho: ").append(this.mergulho).append("\n");
         return sb.toString();
@@ -95,5 +95,9 @@ public class GuardaRedes extends Jogador{
                 this.getJogoDeMaos()   == gr.getJogoDeMaos()   &&
                 this.getReflexos()     == gr.getReflexos()     &&
                 this.getMergulho()     == gr.getMergulho();
+    }
+
+    public int calculaPontuacaoGeral() {
+        return 0;
     }
 }

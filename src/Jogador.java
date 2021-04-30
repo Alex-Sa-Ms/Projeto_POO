@@ -4,55 +4,55 @@ import java.util.stream.Collectors;
 
 public abstract class Jogador {
     private String nome;
-    private int pontuacao_geral;
+    private int pontuacaoGeral;
     private int velocidade;
     private int resistencia;
     private int destreza;
     private int impulsao;
-    private int jogo_de_cabeca;
+    private int jogoDeCabeca;
     private int remate;
     private int passe;
-    private List<String> historial_clubes;
+    private List<String> historialClubes;
 
 
     //Construtores
 
     public Jogador() {
         this.nome             = "";
-        this.pontuacao_geral  = 0;
+        this.pontuacaoGeral   = 0;
         this.velocidade       = 0;
         this.resistencia      = 0;
         this.destreza         = 0;
         this.impulsao         = 0;
-        this.jogo_de_cabeca   = 0;
+        this.jogoDeCabeca     = 0;
         this.remate           = 0;
         this.passe            = 0;
-        this.historial_clubes = new ArrayList<>();
+        this.historialClubes  = new ArrayList<>();
     }
 
-    public Jogador(String nome, int velocidade,int resistencia,int destreza,int impulsao,int jogo_de_cabeca,int remate,int passe,List<String> historial_clubes) {
+    public Jogador(String nome, int velocidade,int resistencia,int destreza,int impulsao,int jogoDeCabeca,int remate,int passe,List<String> historialClubes) {
         this.nome             = nome;
         this.velocidade       = velocidade;
         this.resistencia      = resistencia;
         this.destreza         = destreza;
         this.impulsao         = impulsao;
-        this.jogo_de_cabeca   = jogo_de_cabeca;
+        this.jogoDeCabeca     = jogoDeCabeca;
         this.remate           = remate;
         this.passe            = passe;
-        this.historial_clubes = historial_clubes.stream().collect(Collectors.toList());
+        this.historialClubes  = historialClubes.stream().collect(Collectors.toList());
     }
 
     public Jogador(Jogador jog){
         this.nome             = jog.getNome();
-        this.pontuacao_geral  = jog.getPontuacaoGeral();
+        this.pontuacaoGeral   = jog.getPontuacaoGeral();
         this.velocidade       = jog.getVelocidade();
         this.resistencia      = jog.getResistencia();
         this.destreza         = jog.getDestreza();
         this.impulsao         = jog.getImpulsao();
-        this.jogo_de_cabeca   = jog.getJogoDeCabeca();
+        this.jogoDeCabeca     = jog.getJogoDeCabeca();
         this.remate           = jog.getRemate();
         this.passe            = jog.getPasse();
-        this.historial_clubes = jog.getHistorialClubes();
+        this.historialClubes  = jog.getHistorialClubes();
     }
 
     //Gets
@@ -62,7 +62,7 @@ public abstract class Jogador {
     }
 
     public int getPontuacaoGeral(){
-        return this.pontuacao_geral;
+        return this.pontuacaoGeral;
     }
 
     public int getVelocidade(){
@@ -82,7 +82,7 @@ public abstract class Jogador {
     }
 
     public int getJogoDeCabeca(){
-        return this.jogo_de_cabeca;
+        return this.jogoDeCabeca;
     }
 
     public int getRemate(){
@@ -94,10 +94,10 @@ public abstract class Jogador {
     }
 
     public List<String> getHistorialClubes(){
-        return this.historial_clubes.stream().collect(Collectors.toList());
+        return this.historialClubes.stream().collect(Collectors.toList());
     }
 
-    public String getCurrentClub(){ return this.historial_clubes.get(this.historial_clubes.size()); }
+    public String getCurrentClub(){ return this.historialClubes.get(this.historialClubes.size()); }
 
 
     //Sets
@@ -106,7 +106,7 @@ public abstract class Jogador {
         this.nome = nome;
     }
 
-    public void setPontuacaoGeral(){ this.pontuacao_geral = this.calculaPontuacaoGeral(); }
+    public void setPontuacaoGeral(){ this.pontuacaoGeral = this.calculaPontuacaoGeral(); }
 
     public void setVelocidade(int velocidade){
         this.velocidade = velocidade;
@@ -124,8 +124,8 @@ public abstract class Jogador {
         this.impulsao = impulsao;
     }
 
-    public void setJogoDeCabeca(int jogo_de_cabeca){
-        this.jogo_de_cabeca = jogo_de_cabeca;
+    public void setJogoDeCabeca(int jogoDeCabeca){
+        this.jogoDeCabeca = jogoDeCabeca;
     }
 
     public void setRemate(int remate){
@@ -136,13 +136,13 @@ public abstract class Jogador {
         this.passe = passe;
     }
 
-    public void setHistorialClubes(List<String> historial_clubes){
-        this.historial_clubes = historial_clubes.stream().collect(Collectors.toList());
+    public void setHistorialClubes(List<String> historialClubes){
+        this.historialClubes = historialClubes.stream().collect(Collectors.toList());
     }
 
     /* Adiciona o nome do novo clube no fim do historial de clubes.*/
     public void setNewCurrentClub(String clubName){
-        this.historial_clubes.add(clubName);
+        this.historialClubes.add(clubName);
     }
 
     /* Calcula a pontuação geral de um jogador em função da sua classe */
@@ -159,10 +159,10 @@ public abstract class Jogador {
           .append("Resistência: ").append(this.resistencia).append("\n")
           .append("Destreza: ").append(this.destreza).append("\n")
           .append("Impulsão: ").append(this.impulsao).append("\n")
-          .append("Jogo de Cabeça: ").append(this.jogo_de_cabeca).append("\n")
+          .append("Jogo de Cabeça: ").append(this.jogoDeCabeca).append("\n")
           .append("Remate: ").append(this.remate).append("\n")
           .append("Passe: ").append(this.passe).append("\n")
-          .append("Historial de Clubes: ").append(this.historial_clubes.toString()).append("\n");
+          .append("Historial de Clubes: ").append(this.historialClubes.toString()).append("\n");
         return sb.toString();
     }
 

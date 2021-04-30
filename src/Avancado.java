@@ -16,8 +16,8 @@ public class Avancado extends Jogador {
         this.posicionamento = 0;
     }
 
-    public Avancado(String nome, int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeca, int remate, int passe, List<String> historial_clubes, int finalizacao, int salto, int efeito, int posicionamento){
-        super(nome, velocidade, resistencia, destreza, impulsao, jogo_de_cabeca, remate, passe, historial_clubes);
+    public Avancado(String nome, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int finalizacao, int salto, int efeito, int posicionamento){
+        super(nome, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
         this.finalizacao    = finalizacao;
         this.salto          = salto;
         this.efeito         = efeito;
