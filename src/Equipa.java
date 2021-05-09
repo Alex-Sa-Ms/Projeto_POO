@@ -24,7 +24,7 @@ public class Equipa {
     /** Verifica existência na equipa/titulares/suplentes **/
     public boolean existeNaEquipa(Jogador jog){ return this.titulares.contains(jog) || this.suplentes.contains(jog); }
 
-    public boolean existeNaEquipa(int nrCamisola){ return this.titulares.stream().anyMatch(jog -> jog.getNrCamisola() == nrCamisola)
+    public boolean existeNaEquipa(int nrCamisola){ return this.titulares.stream().anyMatch(jog -> jog != null && jog.getNrCamisola() == nrCamisola)
             || this.suplentes.stream().anyMatch(jog -> jog.getNrCamisola() == nrCamisola);
     }
 
@@ -337,6 +337,26 @@ public class Equipa {
         this.suplentes.set(index_jog2, jogador1);
     }
 
+    public void substituicao(int nrCamisolaTitular, int nrCamisolaSuplente) /*throws substituicaoInvalidaException*/{
+        int indexTitular  = existeEmTitulares(nrCamisolaTitular),
+            indexSuplente = existeEmSuplentes(nrCamisolaSuplente);
+
+        /*if(indexTitular  == -1) { throw new substituicaoInvalidaException("Não existe um titular com este número de camisola!\n"); }
+        if(indexSuplente == -1) { throw new substituicaoInvalidaException("Não existe um suplente com este número de camisola!\n"); }*/
+
+        //Caso exista um jogador titular com nr de camisola 'nrCamisolaTitular' e um jogador suplente com nr de camisola 'nrCamisolaSuplente', faz a substituicao
+        //Caso contrario retorna excecao
+        Jogador titular  = this.titulares.get(indexTitular),
+                suplente = this.suplentes.get(indexSuplente);
+
+        this.titulares.set(indexTitular, suplente);
+        this.suplentes.set(indexSuplente, titular);
+
+        //Atualiza a Pontuacao Global
+        this.setPontuacaoGlobal();
+    }
+
+    /*
     public boolean substituicao(Jogador jog1, Jogador jog2){
         int index1, index2;
 
@@ -362,7 +382,7 @@ public class Equipa {
         this.setPontuacaoGlobal();
 
         return false;
-    }
+    }*/
 
 
     /** Verifica Equipa **/
