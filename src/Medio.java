@@ -8,20 +8,23 @@ public class Medio extends Jogador{
 
     public Medio(){
         super();
-        this.intercecao = 0;
-        this.visao      = 0;
+        this.intercecao = 50;
+        this.visao      = 50;
+        super.setPontuacaoGeral();
     }
 
-    public Medio(String nome, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int intercecao, int visao){
-        super(nome, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
+    public Medio(String nome, int nrCamisola, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int intercecao, int visao){
+        super(nome, nrCamisola, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
         this.intercecao = intercecao;
         this.visao      = visao;
+        super.setPontuacaoGeral();
     }
 
     public Medio(Medio md){
         super(md);
         this.intercecao = md.getIntercecao();
         this.visao      = md.getVisao();
+        super.setPontuacaoGeral();
     }
 
 

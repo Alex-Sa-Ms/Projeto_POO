@@ -10,18 +10,20 @@ public class Defesa extends Jogador{
 
     public Defesa(){
         super();
-        this.defesa   = 0;
-        this.forca    = 0;
-        this.corte    = 0;
-        this.marcacao = 0;
+        this.defesa   = 50;
+        this.forca    = 50;
+        this.corte    = 50;
+        this.marcacao = 50;
+        super.setPontuacaoGeral();
     }
 
-    public Defesa(String nome, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int defesa, int forca, int corte, int marcacao){
-        super(nome, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
+    public Defesa(String nome, int nrCamisola, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int defesa, int forca, int corte, int marcacao){
+        super(nome, nrCamisola, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
         this.defesa   = defesa;
         this.forca    = forca;
         this.corte    = corte;
         this.marcacao = marcacao;
+        super.setPontuacaoGeral();
     }
 
     public Defesa(Defesa def){
@@ -30,6 +32,7 @@ public class Defesa extends Jogador{
         this.forca    = def.getForca();
         this.corte    = def.getCorte();
         this.marcacao = def.getMarcacao();
+        super.setPontuacaoGeral();
     }
 
 

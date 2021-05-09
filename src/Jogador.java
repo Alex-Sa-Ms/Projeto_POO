@@ -1,9 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Random;
 
 public abstract class Jogador {
     private String nome;
+    private int nrCamisola;
     private int pontuacaoGeral;
     private int velocidade;
     private int resistencia;
@@ -18,20 +20,23 @@ public abstract class Jogador {
     //Construtores
 
     public Jogador() {
+        Random random = new Random();
         this.nome             = "";
-        this.pontuacaoGeral   = 0;
-        this.velocidade       = 0;
-        this.resistencia      = 0;
-        this.destreza         = 0;
-        this.impulsao         = 0;
-        this.jogoDeCabeca     = 0;
-        this.remate           = 0;
-        this.passe            = 0;
+        this.nrCamisola       = random.nextInt(100);
+        this.pontuacaoGeral   = 50;
+        this.velocidade       = 50;
+        this.resistencia      = 50;
+        this.destreza         = 50;
+        this.impulsao         = 50;
+        this.jogoDeCabeca     = 50;
+        this.remate           = 50;
+        this.passe            = 50;
         this.historialClubes  = new ArrayList<>();
     }
 
-    public Jogador(String nome, int velocidade,int resistencia,int destreza,int impulsao,int jogoDeCabeca,int remate,int passe,List<String> historialClubes) {
+    public Jogador(String nome, int nrCamisola, int velocidade,int resistencia,int destreza,int impulsao,int jogoDeCabeca,int remate,int passe,List<String> historialClubes) {
         this.nome             = nome;
+        this.nrCamisola       = nrCamisola;
         this.velocidade       = velocidade;
         this.resistencia      = resistencia;
         this.destreza         = destreza;
@@ -44,6 +49,7 @@ public abstract class Jogador {
 
     public Jogador(Jogador jog){
         this.nome             = jog.getNome();
+        this.nrCamisola       = jog.getNrCamisola();
         this.pontuacaoGeral   = jog.getPontuacaoGeral();
         this.velocidade       = jog.getVelocidade();
         this.resistencia      = jog.getResistencia();
@@ -60,6 +66,8 @@ public abstract class Jogador {
     public String getNome(){
         return this.nome;
     }
+
+    public int getNrCamisola() { return nrCamisola; }
 
     public int getPontuacaoGeral(){
         return this.pontuacaoGeral;
@@ -106,6 +114,8 @@ public abstract class Jogador {
         this.nome = nome;
     }
 
+    public void setNrCamisola(int nrCamisola) { this.nrCamisola = nrCamisola; }
+
     public void setPontuacaoGeral(){ this.pontuacaoGeral = this.calculaPontuacaoGeral(); }
 
     public void setVelocidade(int velocidade){
@@ -145,7 +155,7 @@ public abstract class Jogador {
         this.historialClubes.add(clubName);
     }
 
-    /* Calcula a pontuação geral de um jogador em função da sua classe */
+    /* Calcula a pontuação geral de um jogador em função da sua subclasse */
     public abstract int calculaPontuacaoGeral();
 
     //clone
@@ -155,6 +165,7 @@ public abstract class Jogador {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("Name: ").append(this.nome).append("\n")
+          .append("Nº da Camisola: ").append(this.nrCamisola).append("\n")
           .append("Velocidade: ").append(this.velocidade).append("\n")
           .append("Resistência: ").append(this.resistencia).append("\n")
           .append("Destreza: ").append(this.destreza).append("\n")
@@ -172,6 +183,7 @@ public abstract class Jogador {
         if(o == null || this.getClass() != o.getClass()) return false;
         Jogador jog = (Jogador) o;
         return  this.getNome().equals(jog.getNome())                &&
+                this.getNrCamisola()     == jog.getNrCamisola()     &&
                 this.getPontuacaoGeral() == jog.getPontuacaoGeral() &&
                 this.getVelocidade()     == jog.getVelocidade()     &&
                 this.getResistencia()    == jog.getResistencia()    &&
@@ -182,5 +194,4 @@ public abstract class Jogador {
                 this.getPasse()          == jog.getPasse()          &&
                 this.getHistorialClubes().equals(jog.getHistorialClubes());
     }
-
 }
