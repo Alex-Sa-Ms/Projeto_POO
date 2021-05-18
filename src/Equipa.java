@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Equipa {
+public class Equipa implements Team {
     private String nome;
     private int pontuacaoGlobal;
 
