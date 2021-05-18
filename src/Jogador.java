@@ -44,7 +44,10 @@ public abstract class Jogador {
         this.jogoDeCabeca     = jogoDeCabeca;
         this.remate           = remate;
         this.passe            = passe;
-        this.historialClubes  = historialClubes.stream().collect(Collectors.toList());
+        if(historialClubes != null)
+            this.historialClubes = historialClubes.stream().collect(Collectors.toList());
+        else
+            this.historialClubes = new ArrayList<>();
     }
 
     public Jogador(Jogador jog){
