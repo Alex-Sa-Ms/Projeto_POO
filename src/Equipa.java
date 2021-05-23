@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Equipa implements Team {
+public class Equipa implements Team{
     private String nome;
     private int pontuacaoGlobal;
     private Formacao formacao;
@@ -40,13 +40,13 @@ public class Equipa implements Team {
     public boolean existeNaEquipa(Jogador jog){ return Arrays.stream(this.titulares).anyMatch(j -> j.equals(jog)) || existeEmSuplentes(jog);}
 
     public boolean existeNaEquipa(int nrCamisola){ return Arrays.stream(this.titulares).anyMatch(jog -> jog != null && jog.getNrCamisola() == nrCamisola)
-            || existeEmSuplentes(nrCamisola);
+                                                       || existeEmSuplentes(nrCamisola);
     }
 
 
     /** Auxiliar na inserção de jogadores **/
 
-    Comparator<Jogador> nrCamisolaComparator = Comparator.comparingInt(Jogador::getNrCamisola);
+    private static final Comparator<Jogador> nrCamisolaComparator = Comparator.comparingInt(Jogador::getNrCamisola);
 
     //Retorna o maior número de camisola presente na equipa
     //Usada para que em caso de colisão, seja atribuido automaticamente um número ainda não utilizado
@@ -102,12 +102,34 @@ public class Equipa implements Team {
         this.formacao        = e.getFormacao();
     }
 
+    /** Clone **/
+
+    public Equipa clone(){
+        return new Equipa(this);
+    }
+
+    public Team Clone(){
+        return this.clone();
+    }
 
     /** Gets **/
 
     public String getNome() { return this.nome; }
+    public String getName() { return this.nome; }
 
-    public Jogador[] getTitulares() { return Arrays.copyOf(this.titulares, 11); }
+    public Jogador[] getTitulares(){
+        Jogador[] cloneArray = new Jogador[11];
+        for(int i = 0; i < 11 ; i++)
+            if(this.titulares[i] != null)
+                cloneArray[i] = this.titulares[i];
+        return cloneArray;
+    }
+
+    public List<Player> getStartingPlayers(){
+        return Arrays.stream(this.titulares)
+                     .map(Player::Clone)
+                     .collect(Collectors.toCollection(ArrayList::new));
+    }
 
     public Map<Integer,Jogador> getSuplentes() {
         Map<Integer,Jogador> newMap = new HashMap<>();
@@ -119,6 +141,53 @@ public class Equipa implements Team {
 
     public int getPontuacaoGlobal() { return this.pontuacaoGlobal; }
 
+    public List<Player> getStrikers(){
+        List<Player> ljog = new ArrayList<>();
+
+        int n = this.getInicioAvancados();
+        for(int i = n; i < 11; i++){
+            ljog.add(this.getTitulares()[i].clone());
+        }
+
+        return ljog;
+    }
+
+    public List<Player> getAttackers(){
+        List<Player> ljog = new ArrayList<>();
+
+        //Clonagem dos avancados para a lista que vai ser retornada
+        int n = this.getInicioAvancados();
+        for(int i = n; i < 11; i++){
+            ljog.add(this.getTitulares()[i].clone());
+        }
+
+        //Gerado um número de médios que vão auxiliar no ataque
+        Random rand = new Random();
+        int aleatorio = rand.nextInt(this.formacao.getNrMedios()+1);
+        List<Player> medios = new ArrayList<>();
+
+        //Copiados todos os médios para uma lista auxiliar
+        for(int i = this.getInicioMedios(); i < n; i++){
+            medios.add(this.getTitulares()[i]);
+        }
+
+        //Escolha aleatória e clonagem dos médios que vão auxiliar o ataque
+        for(int i = 0; i < aleatorio; i++){
+            int randomIndex = rand.nextInt(medios.size());
+            ljog.add(medios.get(randomIndex).Clone());
+            medios.remove(randomIndex);
+        }
+        
+        return ljog;
+    }
+
+    public List<Player> getDefenders(){
+        List<Player> ljog = new ArrayList<>();
+        for(int i = 1; i < this.getInicioMedios() ; i++){
+            ljog.add(this.getTitulares()[i].clone());
+        }
+        return ljog;
+    }
 
     /** Sets **/
 
@@ -153,9 +222,7 @@ public class Equipa implements Team {
         return 1 + formacao.getNrDefesas() + formacao.getNrLaterais();
     }
 
-    private int getInicioAvancados(){
-        return 1 + formacao.getNrDefesas() + formacao.getNrLaterais() + formacao.getNrMedios();
-    }
+    private int getInicioAvancados(){ return 1 + formacao.getNrDefesas() + formacao.getNrLaterais() + formacao.getNrMedios(); }
 
     //Esta função tenta inserir um jogador, que não exista na equipa, começando no indice 'index' fornecido até 'limite' - 1. Um jogador só é inserido numa posição null.
     //Retorna true caso consiga inserir, e false caso contrário.

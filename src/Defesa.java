@@ -99,7 +99,7 @@ public class Defesa extends Jogador{
 
     public int calculaPontuacaoGeral() {
 
-        return (this.getVelocidade()) * 0.1 +
+        return (int) ((this.getVelocidade()) * 0.1 +
                 (this.getRemate()) * 0.03 +
                 (this.getDestreza()) * 0.05 +
                 (this.getImpulsao()) * 0.05 +
@@ -110,7 +110,7 @@ public class Defesa extends Jogador{
                 (this.getCorte()) * 0.1 +
                 (this.getDefesa()) * 0.15 +
                 (this.getForca()) * 0.1 +
-                (this.getMarcacao()) * 0.15 +;
+                (this.getMarcacao()) * 0.15 );
 
     }
 }

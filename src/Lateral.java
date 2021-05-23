@@ -74,7 +74,7 @@ public class Lateral extends Jogador{
 
     public int calculaPontuacaoGeral() {
 
-        return (this.getVelocidade()) * 0.1 +
+        return (int) ((this.getVelocidade()) * 0.1 +
                 (this.getRemate()) * 0.1 +
                 (this.getDestreza()) * 0.1 +
                 (this.getImpulsao()) * 0.1 +
@@ -83,7 +83,7 @@ public class Lateral extends Jogador{
                 (this.getResistencia()) * 0.15 +
 
                 (this.getCruzamento()) * 0.15 +
-                (this.getDrible()) * 0.15 +;
+                (this.getDrible()) * 0.15 );
 
     }
 }

@@ -101,7 +101,7 @@ public class Avancado extends Jogador {
 
     public int calculaPontuacaoGeral() {
 
-        return (this.getVelocidade()) * 0.1 +
+        return (int) ((this.getVelocidade()) * 0.1 +
                 (this.getRemate()) * 0.1 +
                 (this.getDestreza()) * 0.05 +
                 (this.getImpulsao()) * 0.1 +
@@ -112,7 +112,7 @@ public class Avancado extends Jogador {
                 (this.getEfeito()) * 0.1 +
                 (this.getPosicionamento()) * 0.1 +
                 (this.getSalto()) * 0.1 +
-                (this.getFinalizacao()) * 0.15 ;
+                (this.getFinalizacao()) * 0.15) ;
 
     }
 }
