@@ -5,6 +5,7 @@ import java.util.Random;
 
 public abstract class Jogador {
     private String nome;
+    private AreaDeJogo areaDeJogo;
     private int nrCamisola;
     private int pontuacaoGeral;
     private int velocidade;
@@ -16,12 +17,12 @@ public abstract class Jogador {
     private int passe;
     private List<String> historialClubes;
 
-
     //Construtores
 
-    public Jogador() {
+    public Jogador(String nome) {
         Random random = new Random();
-        this.nome             = "";
+        this.nome             = nome;
+        this.areaDeJogo       = randomAreaDeJogo();
         this.nrCamisola       = random.nextInt(100);
         this.pontuacaoGeral   = 50;
         this.velocidade       = 50;
@@ -34,8 +35,9 @@ public abstract class Jogador {
         this.historialClubes  = new ArrayList<>();
     }
 
-    public Jogador(String nome, int nrCamisola, int velocidade,int resistencia,int destreza,int impulsao,int jogoDeCabeca,int remate,int passe,List<String> historialClubes) {
+    public Jogador(String nome, AreaDeJogo areaDeJogo, int nrCamisola, int velocidade,int resistencia,int destreza,int impulsao,int jogoDeCabeca,int remate,int passe,List<String> historialClubes) {
         this.nome             = nome;
+        this.areaDeJogo       = areaDeJogo;
         this.nrCamisola       = nrCamisola;
         this.velocidade       = velocidade;
         this.resistencia      = resistencia;
@@ -45,13 +47,14 @@ public abstract class Jogador {
         this.remate           = remate;
         this.passe            = passe;
         if(historialClubes != null)
-            this.historialClubes = historialClubes.stream().collect(Collectors.toList());
+            this.historialClubes = new ArrayList<>(historialClubes);
         else
             this.historialClubes = new ArrayList<>();
     }
 
     public Jogador(Jogador jog){
         this.nome             = jog.getNome();
+        this.areaDeJogo       = jog.getAreaDeJogo();
         this.nrCamisola       = jog.getNrCamisola();
         this.pontuacaoGeral   = jog.getPontuacaoGeral();
         this.velocidade       = jog.getVelocidade();
@@ -69,6 +72,8 @@ public abstract class Jogador {
     public String getNome(){
         return this.nome;
     }
+
+    public AreaDeJogo getAreaDeJogo() { return areaDeJogo; }
 
     public int getNrCamisola() { return nrCamisola; }
 
@@ -117,6 +122,8 @@ public abstract class Jogador {
         this.nome = nome;
     }
 
+    public void setAreaDeJogo(AreaDeJogo areaDeJogo) { this.areaDeJogo = areaDeJogo; }
+
     public void setNrCamisola(int nrCamisola) { this.nrCamisola = nrCamisola; }
 
     public void setPontuacaoGeral(){ this.pontuacaoGeral = this.calculaPontuacaoGeral(); }
@@ -150,12 +157,23 @@ public abstract class Jogador {
     }
 
     public void setHistorialClubes(List<String> historialClubes){
-        this.historialClubes = historialClubes.stream().collect(Collectors.toList());
+        this.historialClubes = new ArrayList<>(historialClubes);
     }
 
     /* Adiciona o nome do novo clube no fim do historial de clubes.*/
     public void setNewCurrentClub(String clubName){
         this.historialClubes.add(clubName);
+    }
+
+    /* Retorna uma area de jogo aleatória */
+    public AreaDeJogo randomAreaDeJogo(){
+        int random = new Random().nextInt(3);
+        if(random == 0)
+            return AreaDeJogo.ESQUERDO;
+        else if (random == 1)
+            return AreaDeJogo.CENTRO;
+        else
+            return AreaDeJogo.DIREITO;
     }
 
     /* Calcula a pontuação geral de um jogador em função da sua subclasse */

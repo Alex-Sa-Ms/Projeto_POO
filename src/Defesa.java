@@ -8,8 +8,8 @@ public class Defesa extends Jogador{
 
     //Construtores
 
-    public Defesa(){
-        super();
+    public Defesa(String nome){
+        super(nome);
         this.defesa   = 50;
         this.forca    = 50;
         this.corte    = 50;
@@ -17,8 +17,8 @@ public class Defesa extends Jogador{
         super.setPontuacaoGeral();
     }
 
-    public Defesa(String nome, int nrCamisola, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int defesa, int forca, int corte, int marcacao){
-        super(nome, nrCamisola, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
+    public Defesa(String nome, AreaDeJogo areaDeJogo, int nrCamisola, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int defesa, int forca, int corte, int marcacao){
+        super(nome, areaDeJogo, nrCamisola, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
         this.defesa   = defesa;
         this.forca    = forca;
         this.corte    = corte;
@@ -89,7 +89,7 @@ public class Defesa extends Jogador{
 
     //equals
     public boolean equals(Object o){
-        if(super.equals(o) == false) return false;
+        if(!super.equals(o)) return false;
         Defesa def = (Defesa) o;
         return  this.getDefesa()   == def.getDefesa() &&
                 this.getForca()    == def.getForca()  &&

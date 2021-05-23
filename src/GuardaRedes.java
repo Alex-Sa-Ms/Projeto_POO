@@ -9,8 +9,8 @@ public class GuardaRedes extends Jogador{
 
     //Construtores
 
-    public GuardaRedes(){
-        super();
+    public GuardaRedes(String nome){
+        super(nome);
         this.elasticidade = 50;
         this.jogoDeMaos   = 50;
         this.reflexos     = 50;
@@ -18,8 +18,8 @@ public class GuardaRedes extends Jogador{
         super.setPontuacaoGeral();
     }
 
-    public GuardaRedes(String nome, int nrCamisola, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int elasticidade, int jogoDeMaos, int reflexos, int mergulho){
-        super(nome, nrCamisola, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
+    public GuardaRedes(String nome, AreaDeJogo areaDeJogo, int nrCamisola, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int elasticidade, int jogoDeMaos, int reflexos, int mergulho){
+        super(nome, areaDeJogo, nrCamisola, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
         this.elasticidade = elasticidade;
         this.jogoDeMaos   = jogoDeMaos;
         this.reflexos     = reflexos;
