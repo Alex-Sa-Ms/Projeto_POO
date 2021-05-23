@@ -101,6 +101,18 @@ public class GuardaRedes extends Jogador{
     }
 
     public int calculaPontuacaoGeral() {
-        return 0;
+
+        return  (this.getVelocidade())*0.05+
+                (this.getRemate())*0.04+
+                (this.getDestreza())*0.2+
+                (this.getImpulsao())*0.1+
+                (this.getJogoDeCabeca())*0.01+
+                (this.getPasse())*0.05+
+                (this.getResistencia())*0.05+
+
+                (this.getElasticidade())*0.1+
+                (this.getJogoDeMaos())*0.1+
+                (this.getMergulho())*0.1+
+                (this.getReflexos())*0.2+;
     }
 }

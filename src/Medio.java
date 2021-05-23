@@ -73,6 +73,16 @@ public class Medio extends Jogador{
 
 
     public int calculaPontuacaoGeral() {
-        return 0;
-    }
-}
+
+        return (this.getVelocidade()) * 0.1 +
+                (this.getRemate()) * 0.05 +
+                (this.getDestreza()) * 0.1 +
+                (this.getImpulsao()) * 0.1 +
+                (this.getJogoDeCabeca()) * 0.05 +
+                (this.getPasse()) * 0.2 +
+                (this.getResistencia()) * 0.1 +
+
+                (this.getVisao()) * 0.15 +
+                (this.getIntercecao()) * 0.15 +;
+
+    }}
