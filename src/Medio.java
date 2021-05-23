@@ -6,15 +6,15 @@ public class Medio extends Jogador{
 
     //Construtores
 
-    public Medio(){
-        super();
+    public Medio(String nome){
+        super(nome);
         this.intercecao = 50;
         this.visao      = 50;
         super.setPontuacaoGeral();
     }
 
-    public Medio(String nome, int nrCamisola, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int intercecao, int visao){
-        super(nome, nrCamisola, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
+    public Medio(String nome, AreaDeJogo areaDeJogo, int nrCamisola, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int intercecao, int visao){
+        super(nome, areaDeJogo, nrCamisola, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
         this.intercecao = intercecao;
         this.visao      = visao;
         super.setPontuacaoGeral();
@@ -65,7 +65,7 @@ public class Medio extends Jogador{
 
     //equals
     public boolean equals(Object o){
-        if(super.equals(o) == false) return false;
+        if(!super.equals(o)) return false;
         Medio md = (Medio) o;
         return  this.getIntercecao() == md.getIntercecao() &&
                 this.getVisao()      == md.getVisao();

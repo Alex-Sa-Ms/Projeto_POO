@@ -6,15 +6,15 @@ public class Lateral extends Jogador{
 
     //Construtores
 
-    public Lateral(){
-        super();
+    public Lateral(String nome){
+        super(nome);
         this.cruzamento = 50;
         this.drible     = 50;
         super.setPontuacaoGeral();
     }
 
-    public Lateral(String nome, int nrCamisola, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int cruzamento, int drible){
-        super(nome, nrCamisola, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
+    public Lateral(String nome, AreaDeJogo areaDeJogo, int nrCamisola, int velocidade, int resistencia, int destreza, int impulsao, int jogoDeCabeca, int remate, int passe, List<String> historialClubes, int cruzamento, int drible){
+        super(nome, areaDeJogo, nrCamisola, velocidade, resistencia, destreza, impulsao, jogoDeCabeca, remate, passe, historialClubes);
         this.cruzamento = cruzamento;
         this.drible     = drible;
         super.setPontuacaoGeral();
@@ -65,7 +65,7 @@ public class Lateral extends Jogador{
 
     //equals
     public boolean equals(Object o){
-        if(super.equals(o) == false) return false;
+        if(!super.equals(o)) return false;
         Lateral ll = (Lateral) o;
         return  this.getCruzamento() == ll.getCruzamento() &&
                 this.getDrible()     == ll.getDrible();
