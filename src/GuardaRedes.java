@@ -78,7 +78,7 @@ public class GuardaRedes extends Jogador{
     public GuardaRedes clone(){
         return new GuardaRedes(this);
     }
-
+    public Player Clone() { return this.clone(); }
     //toString
     public String toString(){
         StringBuilder sb = new StringBuilder();
@@ -92,7 +92,7 @@ public class GuardaRedes extends Jogador{
 
     //equals
     public boolean equals(Object o){
-        if(super.equals(o) == false) return false;
+        if(!super.equals(o)) return false;
         GuardaRedes gr = (GuardaRedes) o;
         return  this.getElasticidade() == gr.getElasticidade() &&
                 this.getJogoDeMaos()   == gr.getJogoDeMaos()   &&
@@ -103,10 +103,10 @@ public class GuardaRedes extends Jogador{
     public int calculaPontuacaoGeral() {
 
         return  (int) ((this.getVelocidade())*0.05+
-                (this.getRemate())*0.04+
+                (this.getStrike())*0.04+
                 (this.getDestreza())*0.2+
                 (this.getImpulsao())*0.1+
-                (this.getJogoDeCabeca())*0.01+
+                (this.getHeadGame())*0.01+
                 (this.getPasse())*0.05+
                 (this.getResistencia())*0.05+
 

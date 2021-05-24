@@ -1,10 +1,10 @@
-public class Eventos implements Events {
+public class Eventos{
     private String descricao;
-    private float tempo;
+    private int tempo;
 
-    public Eventos(String descricao, float tempo){
+    public Eventos(String descricao, int tempo){
         this.descricao = descricao;
-        this.tempo = tempo;
+        this.tempo     = tempo;
     }
 
     public String getEventDescription(){
@@ -20,7 +20,7 @@ public class Eventos implements Events {
         this.descricao = descricao;
     }
 
-    public void setTimeStamp(float tempo) {
+    public void setTimeStamp(int tempo) {
         this.tempo = tempo;
     }
 

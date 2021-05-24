@@ -53,6 +53,7 @@ public class Lateral extends Jogador{
     public Lateral clone(){
         return new Lateral(this);
     }
+    public Player Clone()  { return this.clone(); }
 
     //toString
     public String toString(){
@@ -75,10 +76,10 @@ public class Lateral extends Jogador{
     public int calculaPontuacaoGeral() {
 
         return (int) ((this.getVelocidade()) * 0.1 +
-                (this.getRemate()) * 0.1 +
+                (this.getStrike()) * 0.1 +
                 (this.getDestreza()) * 0.1 +
                 (this.getImpulsao()) * 0.1 +
-                (this.getJogoDeCabeca()) * 0.05 +
+                (this.getHeadGame()) * 0.05 +
                 (this.getPasse()) * 0.1 +
                 (this.getResistencia()) * 0.15 +
 

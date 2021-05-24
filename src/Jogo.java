@@ -1,55 +1,44 @@
-import java.sql.Time;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.lang.Integer.compare;
-
-
-public class Jogo implements Game{
+public class Jogo{
 
     private Team equipaCasa;
     private Team equipaFora;
     private int golosCasa;
     private int golosFora;
     private boolean posseDeBola; //'true' se a equipa da casa é que tem a posse de bola, 'false' em caso contrário
-    private float time;
+    private int time;
     private int parte;
-    private List<Events> eventos;
-    /*
-    private List<Jogador> ataque;
-    private List<Jogador> defesa;
-    private Jogador guardaRedes;
-    private Jogador goleador;
-    private int mediaAtacante;
-    private int mediaDefensiva;
-    */
+    private List<Eventos> eventos;
 
-
-    public Jogo(int tempoCadaParte, int nrPartes, Team equipaCasa, Team equipaFora) {
-        this.equipaCasa = equipaCasa.Clone();
-        this.equipaFora = equipaFora.Clone();
-        this.golosCasa = 0;
-        this.golosCasa = 0;
+    public Jogo(Team equipaCasa, Team equipaFora) {
+        this.equipaCasa  = equipaCasa.Clone();
+        this.equipaFora  = equipaFora.Clone();
+        this.golosCasa   = 0;
+        this.golosCasa   = 0;
         this.posseDeBola = true;
-        this.time = 0;
+        this.time        = 0;
+        this.parte       = 1;
+        this.eventos     = new ArrayList<>();
     }
 
     public boolean ataque() {
         Random rand = new Random();
-        List<Jogador> atacantes;
-        List<Jogador> defensores;
+        List<Player> atacantes;
+        List<Player> defensores;
 
         int atkPower;
 
         if(posseDeBola) {
-            atacantes = this.equipaCasa.getAttackers().stream().map(Jogador::clone).collect(Collectors.toList());
+            atacantes = this.equipaCasa.getAttackers().stream().map(Player::Clone).collect(Collectors.toList());
 
-            defensores = this.equipaFora.getDefenders().stream().map(Jogador::clone).collect(Collectors.toList());
+            defensores = this.equipaFora.getDefenders().stream().map(Player::Clone).collect(Collectors.toList());
         }
         else{
-            atacantes  = this.equipaFora.getAttackers().stream().map(Jogador::clone).collect(Collectors.toList());
+            atacantes  = this.equipaFora.getAttackers().stream().map(Player::Clone).collect(Collectors.toList());
 
-            defensores = this.equipaCasa.getDefenders().stream().map(Jogador::clone).collect(Collectors.toList());
+            defensores = this.equipaCasa.getDefenders().stream().map(Player::Clone).collect(Collectors.toList());
         }
 
         atkPower = sumPontGeral(atacantes);
@@ -59,54 +48,59 @@ public class Jogo implements Game{
         int aleatorio = rand.nextInt(total);
 
         if (aleatorio < 2 * atkPower){
-            if(posseDeBola) this.eventos.add("Equipa " + this.equipaCasa.getNome() + " finaliza e ");
-            else this.eventos.add("Equipa " + this.equipaFora.getNome() + " finaliza e ");
+            if(posseDeBola) this.eventos.add(new Eventos("Equipa " + this.equipaCasa.getName() + " finaliza e ", this.time));
+            else this.eventos.add(new Eventos("Equipa " + this.equipaFora.getName() + " finaliza e ", this.time));
             return true;
         }
         else{
-            if(posseDeBola) this.eventos.add("Equipa " + this.equipaFora.getNome() + " interceta o ataque!!");
-            else this.eventos.add("Equipa " + this.equipaCasa.getNome() + " interceta o ataque!!");
+            if(posseDeBola) this.eventos.add(new Eventos("Equipa " + this.equipaFora.getName() + " interceta o ataque!!", this.time));
+            else this.eventos.add(new Eventos("Equipa " + this.equipaCasa.getName() + " interceta o ataque!!", this.time));
             return false;
         }
     }
 
     public boolean remate() {
         Random rand = new Random();
-        Jogador striker;
-        Jogador guardaRedes;
+        Player striker;
+        Player guardaRedes;
 
         if(posseDeBola) {
-            List<Jogador> atacantes = this.equipaCasa.getStrikers().stream().map(Jogador::clone).collect(Collectors.toList());
+            List<Player> atacantes = this.equipaCasa.getStrikers().stream().map(Player::Clone).collect(Collectors.toList());
 
-            striker = atacantes.get(rand.nextInt(atacantes.size())).clone();
+            striker = atacantes.get(rand.nextInt(atacantes.size())).Clone();
 
-            guardaRedes = this.equipaFora.getStartingPlayers()[0].clone();
+            guardaRedes = this.equipaFora.getStartingPlayers().get(0).Clone();
         }
         else{
-            List<Jogador> atacantes = this.equipaFora.getStrikers().stream().map(Jogador::clone).collect(Collectors.toList());
+            List<Player> atacantes = this.equipaFora.getStrikers().stream().map(Player::Clone).collect(Collectors.toList());
 
-            striker = atacantes.get(rand.nextInt(atacantes.size())).clone();
+            striker = atacantes.get(rand.nextInt(atacantes.size())).Clone();
 
-            guardaRedes = this.equipaCasa.getStartingPlayers()[0].clone();
+            guardaRedes = this.equipaCasa.getStartingPlayers().get(0).Clone();
         }
 
         int total;
-        if(rand.nextBoolean()) total = guardaRedes.getPontuacaoGeral() + striker.getRemate();
-
-        else  total = guardaRedes.getPontuacaoGeral() + striker.getJogoDeCabeca();
+        if(rand.nextBoolean())
+            total = guardaRedes.getOverall() + striker.getStrike();
+        else
+            total = guardaRedes.getOverall() + striker.getHeadGame();
 
         int aleatorio = rand.nextInt(total);
 
-        float playTime = rand.nextFloat(3);
+        int playTime = rand.nextInt(3);
 
         this.time += playTime;
 
-        if (aleatorio < guardaRedes.getPontuacaoGeral()) {
-            this.eventos.add("Jogador " + striker.getNome() + "rematou e falhou!! Mas que falhanço!!");
+        if (aleatorio < guardaRedes.getOverall()) {
+            this.eventos.add(new Eventos("Jogador " + striker.getName() + "rematou e falhou!! Mas que falhanço!!", this.time));
             return false;
         }
         else{
-            this.eventos.add("Golo !! Jogador " + striker.getNome() + "rematou e marcou!!");
+            this.eventos.add(new Eventos("Golo !! Jogador " + striker.getName() + "rematou e marcou!!", this.time));
+
+            if(posseDeBola) this.golosCasa++;
+            else this.golosFora++;
+
             return true;
         }
 
@@ -114,20 +108,20 @@ public class Jogo implements Game{
 
     public void disputaDeBola(){
         Random rand = new Random();
-        List<Jogador> atacantes;
-        List<Jogador> defensores;
+        List<Player> atacantes;
+        List<Player> defensores;
 
         int atkPower;
 
         if(posseDeBola) {
-            atacantes = Arrays.asList(this.equipaCasa.getStartingPlayers().clone());
+            atacantes = this.equipaCasa.getStartingPlayers();
 
-            defensores = Arrays.asList(this.equipaFora.getStartingPlayers().clone());
+            defensores = this.equipaFora.getStartingPlayers();
         }
         else{
-            atacantes  = Arrays.asList(this.equipaFora.getStartingPlayers().clone());
+            atacantes  = this.equipaFora.getStartingPlayers();
 
-            defensores = Arrays.asList(this.equipaCasa.getStartingPlayers().clone());
+            defensores = this.equipaCasa.getStartingPlayers();
         }
 
         atkPower = sumPontGeral(atacantes);
@@ -139,24 +133,24 @@ public class Jogo implements Game{
         if(aleatorio >= sumPontGeral(atacantes)) {
 
 
-            if(posseDeBola) this.eventos.add(new Eventos("Equipa " + this.equipaFora.getName() + "tomou posse de bola.", this.getCurrentTime()));
-            else this.eventos.add("Equipa " + this.equipaCasa.getName() + "tomou posse de bola.");
+            if(posseDeBola) this.eventos.add(new Eventos("Equipa " + this.equipaFora.getName() + "tomou posse de bola.", this.time));
+            else this.eventos.add(new Eventos("Equipa " + this.equipaCasa.getName() + "tomou posse de bola.", this.time));
             this.posseDeBola = !this.posseDeBola;
         }
         else {
-            if(posseDeBola) this.eventos.add("Equipa " + this.equipaCasa.getName() + "continua o seu ataque.");
-            else this.eventos.add("Equipa " + this.equipaFora.getName() + "continua o seu ataque.");
+            if(posseDeBola) this.eventos.add(new Eventos("Equipa " + this.equipaCasa.getName() + "continua o seu ataque.", this.time));
+            else this.eventos.add(new Eventos("Equipa " + this.equipaFora.getName() + "continua o seu ataque.", this.time));
         }
 
-        float playTime = rand.nextFloat(4);
+        int playTime = rand.nextInt(4);
 
         this.time += 2+playTime;
     }
 
-    public int sumPontGeral(List<Jogador> ljog){
+    public int sumPontGeral(List<Player> ljog){
         int sum=0;
-        for(Jogador jog : ljog){
-            sum += jog.getPontuacaoGeral();
+        for(Player jog : ljog){
+            sum += jog.getOverall();
         }
         return sum;
     }
@@ -179,6 +173,6 @@ public class Jogo implements Game{
 
             this.parte ++;
             time = 45 * (parte-1); //formatar o tempo
-
         }
+    }
 }

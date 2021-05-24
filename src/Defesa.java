@@ -75,6 +75,7 @@ public class Defesa extends Jogador{
     public Defesa clone(){
         return new Defesa(this);
     }
+    public Player Clone() { return this.clone(); }
 
     //toString
     public String toString(){
@@ -100,10 +101,10 @@ public class Defesa extends Jogador{
     public int calculaPontuacaoGeral() {
 
         return (int) ((this.getVelocidade()) * 0.1 +
-                (this.getRemate()) * 0.03 +
+                (this.getStrike()) * 0.03 +
                 (this.getDestreza()) * 0.05 +
                 (this.getImpulsao()) * 0.05 +
-                (this.getJogoDeCabeca()) * 0.02 +
+                (this.getHeadGame()) * 0.02 +
                 (this.getPasse()) * 0.1 +
                 (this.getResistencia()) * 0.15 +
 

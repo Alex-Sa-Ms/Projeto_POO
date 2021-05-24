@@ -53,33 +53,31 @@ public abstract class Jogador implements Player{
     }
 
     public Jogador(Jogador jog){
-        this.nome             = jog.getNome();
+        this.nome             = jog.getName();
         this.areaDeJogo       = jog.getAreaDeJogo();
-        this.nrCamisola       = jog.getNrCamisola();
-        this.pontuacaoGeral   = jog.getPontuacaoGeral();
+        this.nrCamisola       = jog.getShirtNumber();
+        this.pontuacaoGeral   = jog.getOverall();
         this.velocidade       = jog.getVelocidade();
         this.resistencia      = jog.getResistencia();
         this.destreza         = jog.getDestreza();
         this.impulsao         = jog.getImpulsao();
-        this.jogoDeCabeca     = jog.getJogoDeCabeca();
-        this.remate           = jog.getRemate();
+        this.jogoDeCabeca     = jog.getHeadGame();
+        this.remate           = jog.getStrike();
         this.passe            = jog.getPasse();
         this.historialClubes  = jog.getHistorialClubes();
     }
 
     //Gets
 
-    public String getNome(){
+    public String getName(){
         return this.nome;
     }
 
     public AreaDeJogo getAreaDeJogo() { return areaDeJogo; }
 
-    public int getNrCamisola() { return nrCamisola; }
+    public int getShirtNumber() { return nrCamisola; }
 
-    public int getPontuacaoGeral(){
-        return this.pontuacaoGeral;
-    }
+    public int getOverall(){ return this.pontuacaoGeral; }
 
     public int getVelocidade(){
         return this.velocidade;
@@ -97,20 +95,18 @@ public abstract class Jogador implements Player{
         return this.impulsao;
     }
 
-    public int getJogoDeCabeca(){
+    public int getHeadGame(){
         return this.jogoDeCabeca;
     }
 
-    public int getRemate(){
-        return this.remate;
-    }
+    public int getStrike(){ return this.remate; }
 
     public int getPasse(){
         return this.passe;
     }
 
     public List<String> getHistorialClubes(){
-        return this.historialClubes.stream().collect(Collectors.toList());
+        return new ArrayList<>(this.historialClubes);
     }
 
     public String getCurrentClub(){ return this.historialClubes.get(this.historialClubes.size()); }
@@ -124,7 +120,7 @@ public abstract class Jogador implements Player{
 
     public void setAreaDeJogo(AreaDeJogo areaDeJogo) { this.areaDeJogo = areaDeJogo; }
 
-    public void setNrCamisola(int nrCamisola) { this.nrCamisola = nrCamisola; }
+    public void setShirtNumber(int nrCamisola) { this.nrCamisola = nrCamisola; }
 
     public void setPontuacaoGeral(){ this.pontuacaoGeral = this.calculaPontuacaoGeral(); }
 
@@ -203,15 +199,15 @@ public abstract class Jogador implements Player{
         if(this == o) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
         Jogador jog = (Jogador) o;
-        return  this.getNome().equals(jog.getNome())                &&
-                this.getNrCamisola()     == jog.getNrCamisola()     &&
-                this.getPontuacaoGeral() == jog.getPontuacaoGeral() &&
+        return  this.getName().equals(jog.getName())                &&
+                this.getShirtNumber()    == jog.getShirtNumber()    &&
+                this.getOverall()        == jog.getOverall()        &&
                 this.getVelocidade()     == jog.getVelocidade()     &&
                 this.getResistencia()    == jog.getResistencia()    &&
                 this.getDestreza()       == jog.getDestreza()       &&
                 this.getImpulsao()       == jog.getImpulsao()       &&
-                this.getJogoDeCabeca()   == jog.getJogoDeCabeca()   &&
-                this.getRemate()         == jog.getRemate()         &&
+                this.getHeadGame()       == jog.getHeadGame()       &&
+                this.getStrike()         == jog.getStrike()         &&
                 this.getPasse()          == jog.getPasse()          &&
                 this.getHistorialClubes().equals(jog.getHistorialClubes());
     }
