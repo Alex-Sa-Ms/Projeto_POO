@@ -55,6 +55,17 @@ public class GuardaRedes extends Jogador{
         return this.mergulho;
     }
 
+    public int getOverall(int pos, int area) {
+        float deduction = 0;
+
+        if(pos != 0) {
+            if(pos == 1) deduction += 0.2;
+            if(pos == 2) deduction += 0.3;
+            if(pos == 3) deduction += 0.4;
+        }
+
+        return (int) (getOverall()*(1-deduction));
+    }
 
     //Sets
 

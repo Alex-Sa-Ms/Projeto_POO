@@ -38,6 +38,27 @@ public class Lateral extends Jogador{
         return this.drible;
     }
 
+    public int getOverall(int pos, int area) {
+        float deduction = 0;
+        AreaDeJogo areaNow;
+
+        if(area == 0)
+            areaNow = AreaDeJogo.ESQUERDO;
+        else if (area == 1)
+            areaNow = AreaDeJogo.CENTRO;
+        else
+            areaNow = AreaDeJogo.DIREITO;
+
+        if(areaNow != this.getAreaDeJogo()) deduction += 0.05;
+
+        if(pos != 1) {
+            if(pos == 2) deduction += 0.2;
+            else deduction += 0.3;
+        }
+
+        return (int) (getOverall()*(1-deduction));
+    }
+
     //Sets
 
     public void setCruzamento(int cruzamento){

@@ -157,6 +157,7 @@ public class Jogo{
 
 
     public void correJogo(){
+
         while(this.parte <= 2) {
             while (time < 45 * this.time ) {
                 disputaDeBola();

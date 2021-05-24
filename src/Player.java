@@ -14,10 +14,10 @@ public interface Player{
     /*  De modo a manter o código reutilizável é necessário usar um método que seria tipico de C.
         Calcula a pontuação geral de um jogador em função da posicao e a area de jogo.
     *  Posicao:
-    *   - Guarda-Redes: 0
-    *   - Defesa:       1
-    *   - Medio:        2
-    *   - Avancado:     3
+    *   - Guarda-Redes:       0
+    *   - Defesa(/lateral):   1
+    *   - Medio:              2
+    *   - Avancado:           3
     *  Area de Jogo:
     *   - Esquerda:     0
     *   - Centro:       1

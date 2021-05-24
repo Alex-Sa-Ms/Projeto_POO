@@ -54,6 +54,28 @@ public class Defesa extends Jogador{
         return this.marcacao;
     }
 
+    public int getOverall(int pos, int area) {
+        float deduction = 0;
+        AreaDeJogo areaNow;
+
+        if(area == 0)
+            areaNow = AreaDeJogo.ESQUERDO;
+        else if (area == 1)
+            areaNow = AreaDeJogo.CENTRO;
+        else
+            areaNow = AreaDeJogo.DIREITO;
+
+        if(areaNow != this.getAreaDeJogo()) deduction += 0.05;
+
+        if(pos != 1) {
+            if(pos == 0) deduction += 0.2;
+            else if(pos == 2) deduction += 0.2;
+            else if(pos == 3) deduction += 0.3;
+        }
+
+
+        return (int) (getOverall()*(1-deduction));
+    }
 
     //Sets
 

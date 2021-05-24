@@ -38,6 +38,29 @@ public class Medio extends Jogador{
         return this.visao;
     }
 
+    public int getOverall(int pos, int area) {
+        float deduction = 0;
+        AreaDeJogo areaNow;
+
+        if(area == 0)
+            areaNow = AreaDeJogo.ESQUERDO;
+        else if (area == 1)
+            areaNow = AreaDeJogo.CENTRO;
+        else
+            areaNow = AreaDeJogo.DIREITO;
+
+        if(areaNow != this.getAreaDeJogo()) deduction += 0.05;
+
+        if(pos != 2) {
+            if(pos == 0) deduction += 0.4;
+            if(pos == 1) deduction += 0.2;
+            if(pos == 3) deduction += 0.1;
+
+        }
+
+        return (int) (getOverall()*(1-deduction));
+    }
+
     //Sets
 
     public void setIntercecao(int intercecao){
@@ -84,4 +107,5 @@ public class Medio extends Jogador{
                 (this.getVisao()) * 0.15 +
                 (this.getIntercecao()) * 0.15 );
 
-    }}
+    }
+}

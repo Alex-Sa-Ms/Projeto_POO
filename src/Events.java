@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public interface Events {
 
     String getEventDescription();
@@ -5,4 +7,6 @@ public interface Events {
     float getTimeStamp();
 
     Events newEvent(String description, int timeOfTheEvent);
+
+
 }
