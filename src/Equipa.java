@@ -117,6 +117,79 @@ public class Equipa implements Team{
     public String getNome() { return this.nome; }
     public String getName() { return this.nome; }
 
+    public int getTeamOverall() { return this.pontuacaoGlobal; }
+
+    // ** Funçoes sobre as Formacoes **
+    public Formacao getFormacao() { return this.formacao.clone(); }
+
+    // Recebe o index da posicao no array de titulares, e tendo em conta a formacao da equipa retorna a posicao a que esse index corresponde (Avancado, Medio, etc..)
+    // Return:
+    //      - 0 para GR
+    //      - 1 para Defesa(/Lateral)
+    //      - 2 para Medio
+    //      - 3 para Avancado
+    private int getPosicao(int index){
+        int aux; //Variavel utilizada para evitar contas desnecessárias. Usada para guardar o indice onde se começa a guardar os médios
+
+        //É Guarda-Redes?
+        if(index == 0) return 0;
+
+        //É Defesa ou Lateral?
+        aux = getInicioMedios();
+        if (index >= 1 && index < aux) return 1;
+
+        //É Médio?
+        if (index >= aux && index < aux + this.formacao.getNrMedios()) return 2;
+        else return 3;
+    }
+
+    // Recebe o index da posicao no array de titulares, e tendo em conta a formacao da equipa retorna a área de jogo a que esse index corresponde (Esquerda, centro ou direita)
+    // Return:
+    //      - 0 para Esquerda
+    //      - 1 para Centro
+    //      - 2 para Direita
+    private int getAreaDeJogo(int index, int posicao){
+        //Para o guarda-redes nao interessa a posicao
+        if(index == 0) return 1;
+
+        //Se for defesa retorna 1 já que estes sao sempre centrais (dado que existem laterais)
+        if(posicao == 1) {
+            //Se for defesa
+            if(index < this.getInicioLaterais()) return 1;
+
+            //Se for lateral (Só podem existir 2)
+            if(index - this.getInicioLaterais() == 0) //O lateral esquerdo encontra-se no primeiro slot para os laterais. Portanto o outro só pode ser lateral direito
+                return 0;
+            else
+                return 2;
+        }
+        else {
+            //Método de calculo da area de jogo é igual para os medios e avancados
+
+            int nrJogadores, indexInicial;
+            if(posicao == 2){
+                nrJogadores  = this.formacao.getNrMedios();
+                indexInicial = this.getInicioMedios();
+            }
+            else {
+                nrJogadores  = this.formacao.getNrAvancados();
+                indexInicial = this.getInicioAvancados();
+            }
+
+            //Se o número de jogadores dessa posicao for 1 ou 2 só podem ser centrais
+            if(nrJogadores <= 2) return 1;
+            else{
+                //O indice mais baixo relativo a uma certa posicao(nr de jogadores > 2) corresponde ao jogador que joga na esquerda
+                //O mais alto corresponde ao que joga á direita
+                //As restantes sao dos jogadores centrais
+                if(index == indexInicial) return 0;
+                else if(index == indexInicial + nrJogadores - 1) return 2;
+                else return 1;
+            }
+        }
+    }
+
+
     public Player[] getTitulares(){
         Player[] cloneArray = new Player[11];
         for(int i = 0; i < 11 ; i++)
@@ -136,10 +209,6 @@ public class Equipa implements Team{
         this.suplentes.entrySet().forEach(e -> newMap.put(e.getKey(), e.getValue().Clone()));
         return newMap;
     }
-
-    public Formacao getFormacao() { return this.formacao.clone(); }
-
-    public int getTeamOverall() { return this.pontuacaoGlobal; }
 
     public List<Player> getStrikers(){
         List<Player> ljog = new ArrayList<>();

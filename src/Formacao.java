@@ -4,6 +4,12 @@ public class Formacao {
     private int nrMedios;
     private int nrAvancados;
 
+    //Verifica se uma formacao é valida
+    //Só não é válida caso a soma de todos os números não seja igual a 10, e se o número de laterais não seja 0 ou 2.
+    public boolean isValid(int nrDefesas, int nrLaterais, int nrMedios, int nrAvancados){
+        return nrDefesas + nrLaterais + nrMedios + nrAvancados == 10 && (nrLaterais == 0 || nrLaterais == 2);
+    }
+
     //Construtor
 
     public Formacao() {
@@ -14,13 +20,7 @@ public class Formacao {
     }
 
     public Formacao(int nrDefesas, int nrLaterais, int nrMedios, int nrAvancados) {
-        if(nrDefesas + nrLaterais + nrMedios + nrAvancados == 10) {
-            this.nrDefesas   = nrDefesas;
-            this.nrLaterais  = nrLaterais;
-            this.nrMedios    = nrMedios;
-            this.nrAvancados = nrAvancados;
-        }
-        else new Formacao();
+        if(!setFormacao(nrDefesas, nrLaterais, nrMedios, nrAvancados)) new Formacao();
     }
 
     public Formacao(Formacao formacao){
@@ -36,34 +36,28 @@ public class Formacao {
         return nrDefesas;
     }
 
-    public void setNrDefesas(int nrDefesas) {
-        this.nrDefesas = nrDefesas;
-    }
-
     public int getNrLaterais() {
         return nrLaterais;
-    }
-
-    public void setNrLaterais(int nrLaterais) {
-        this.nrLaterais = nrLaterais;
     }
 
     public int getNrMedios() {
         return nrMedios;
     }
 
-    public void setNrMedios(int nrMedios) {
-        this.nrMedios = nrMedios;
-    }
-
     public int getNrAvancados() {
         return nrAvancados;
     }
 
-    public void setNrAvancados(int nrAvancados) {
-        this.nrAvancados = nrAvancados;
+    public boolean setFormacao(int nrDefesas, int nrLaterais, int nrMedios, int nrAvancados) {
+        if(isValid(nrDefesas, nrLaterais, nrMedios, nrAvancados)) {
+            this.nrDefesas   = nrDefesas;
+            this.nrLaterais  = nrLaterais;
+            this.nrMedios    = nrMedios;
+            this.nrAvancados = nrAvancados;
+            return true;
+        }
+        else return false;
     }
-
 
     //Clone
     public Formacao clone(){
