@@ -26,78 +26,78 @@ public class Eventos{
         this.tempo = tempo;
     }
 
-    String getSucessfulStrikeEvent(String jog){
+    public static Eventos getSucessfulStrikeEvent(String jog, int time){
         Random rand = new Random();
         int aleatorio = rand.nextInt(3);
 
-        if(aleatorio == 0) return ("Grande golo de " + jog + "!");
-        else if(aleatorio == 1) return ("Golo! Mas que finalização de" + jog + "!");
-        else return ("Inacreditável! Fantástico remate de " + jog + "!");
+        if(aleatorio == 0) return new Eventos("Grande golo de " + jog + "!", time);
+        else if(aleatorio == 1) return new Eventos("Golo! Mas que finalização de" + jog + "!", time);
+        else return new Eventos("Inacreditável! Fantástico remate de " + jog + "!", time);
     }
 
-    String getFailedStrikeEvent(String jog){
+    public static Eventos getFailedStrikeEvent(String jog, int time){
         Random rand = new Random();
         int aleatorio = rand.nextInt(3);
 
-        if(aleatorio == 0) return ("A bola de " + jog + " acertou na trave!");
-        else if(aleatorio == 1) return ("Falhou! Mas que oportunidade desperdiçada por" + jog + "!");
-        else return ("Inacreditável! Parecia certeiro mas " + jog + " conseguiu falhar!");
+        if(aleatorio == 0) return new Eventos("A bola de " + jog + " acertou na trave!", time);
+        else if(aleatorio == 1) return new Eventos("Falhou! Mas que oportunidade desperdiçada por" + jog + "!", time);
+        else return new Eventos("Inacreditável! Parecia certeiro mas " + jog + " conseguiu falhar!", time);
     }
 
-    String getSucessfulAttackEvent(String equipa){
+    public static Eventos getSucessfulAttackEvent(String equipa, int time){
         Random rand = new Random();
         int aleatorio = rand.nextInt(3);
 
-        if(aleatorio == 0) return (equipa + " passou a linha defensiva e ...");
-        else if(aleatorio == 1) return (equipa + " tem oportunidade de finalizar e ...");
-        else return (equipa + " desmontam a defesa adversária e ...");
+        if(aleatorio == 0) return new Eventos(equipa + " passou a linha defensiva e ...", time);
+        else if(aleatorio == 1) return new Eventos(equipa + " tem oportunidade de finalizar e ...", time);
+        else return new Eventos(equipa + " desmontam a defesa adversária e ...", time);
     }
 
-    String getFailedAttackEvent(String equipa){
+    public static Eventos getFailedAttackEvent(String equipa, int time){
         Random rand = new Random();
         int aleatorio = rand.nextInt(3);
 
-        if(aleatorio == 0) return (equipa + " recupera da situação de perigo e contra-ataca!");
-        else if(aleatorio == 1) return (equipa + " desarma o ataque adversário e avança!");
-        else return ("A linha defensiva do " + equipa + " não deixou a bola passar e começou a atacar");
+        if(aleatorio == 0) return new Eventos(equipa + " recupera da situação de perigo e contra-ataca!", time);
+        else if(aleatorio == 1) return new Eventos(equipa + " desarma o ataque adversário e avança!", time);
+        else return new Eventos("A linha defensiva do " + equipa + " não deixou a bola passar e começou a atacar", time);
 
     }
 
-    String getSucessfulDisputaEvent(String equipa){
+    public static Eventos getSucessfulDisputaEvent(String equipa, int time){
         Random rand = new Random();
         int aleatorio = rand.nextInt(3);
 
-        if(aleatorio == 0) return (equipa + " continua o seu ataque!");
-        else if(aleatorio == 1) return (equipa + " gradualmente conquista o campo!");
-        else return (equipa + " avança no campo adversário!");
+        if(aleatorio == 0) return new Eventos(equipa + " continua o seu ataque!", time);
+        else if(aleatorio == 1) return new Eventos(equipa + " gradualmente conquista o campo!", time);
+        else return new Eventos(equipa + " avança no campo adversário!", time);
     }
 
-    String getFailedDisputaEvent(String equipa){
+    public static Eventos getFailedDisputaEvent(String equipa, int time){
         Random rand = new Random();
         int aleatorio = rand.nextInt(3);
 
-        if(aleatorio == 0) return (equipa + " recupera a bola!");
-        else if(aleatorio == 1) return (equipa + " tomou posse de bola!");
-        else return (equipa + " ganhou a disputa de bola!");
+        if(aleatorio == 0) return new Eventos(equipa + " recupera a bola!", time);
+        else if(aleatorio == 1) return new Eventos(equipa + " tomou posse de bola!", time);
+        else return new Eventos(equipa + " ganhou a disputa de bola!", time);
     }
 
-    String getStartEvent(){
-        return ("O jogo começou!");
+    public static Eventos getStartEvent(int time){
+        return new Eventos ("O jogo começou!", time);
     }
 
-    String getStart2PartEvent(){
-        return ("A segunda parte do jogo começou!");
+    public static Eventos getStart2PartEvent(int time){
+        return new Eventos ("A segunda parte do jogo começou!", time);
     }
 
-    String getFinishEvent(){
-        return ("O jogo terminou!");
+    public static Eventos getFinishEvent(int time){
+        return new Eventos ("O jogo terminou!", time);
     }
 
-    String getStart1PartEvent(){
-        return ("A primeira parte do jogo terminou!");
+    public static Eventos getFinish1PartEvent(int time){
+        return new Eventos ("A primeira parte do jogo terminou!", time);
     }
 
-    String getSwapEvent(String jog, String sub){
-        return ("Jogador " + jog + " é substituido por " + sub + "!");
+    public static Eventos getSwapEvent(String jog, String sub, int time){
+        return new Eventos("Jogador " + jog + " é substituido por " + sub + "!", time);
     }
 }

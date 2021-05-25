@@ -48,13 +48,13 @@ public class Jogo{
         int aleatorio = rand.nextInt(total);
 
         if (aleatorio < 2 * atkPower){
-            if(posseDeBola) this.eventos.add(new Eventos("Equipa " + this.equipaCasa.getName() + " finaliza e ", this.time));
-            else this.eventos.add(new Eventos("Equipa " + this.equipaFora.getName() + " finaliza e ", this.time));
+            if(posseDeBola) this.eventos.add();
+            else this.eventos.add();
             return true;
         }
         else{
-            if(posseDeBola) this.eventos.add(new Eventos("Equipa " + this.equipaFora.getName() + " interceta o ataque!!", this.time));
-            else this.eventos.add(new Eventos("Equipa " + this.equipaCasa.getName() + " interceta o ataque!!", this.time));
+            if(posseDeBola) this.eventos.add();
+            else this.eventos.add();
             return false;
         }
     }
@@ -81,9 +81,9 @@ public class Jogo{
 
         int total;
         if(rand.nextBoolean())
-            total = guardaRedes.getOverall() + striker.getStrike();
+            total = guardaRedes.getOverall(0,0) + striker.getStrike();
         else
-            total = guardaRedes.getOverall() + striker.getHeadGame();
+            total = guardaRedes.getOverall(0,0) + striker.getHeadGame();
 
         int aleatorio = rand.nextInt(total);
 
@@ -91,12 +91,12 @@ public class Jogo{
 
         this.time += playTime;
 
-        if (aleatorio < guardaRedes.getOverall()) {
-            this.eventos.add(new Eventos("Jogador " + striker.getName() + "rematou e falhou!! Mas que falhanço!!", this.time));
+        if (aleatorio < guardaRedes.getOverall(0,0)) {
+            this.eventos.add();
             return false;
         }
         else{
-            this.eventos.add(new Eventos("Golo !! Jogador " + striker.getName() + "rematou e marcou!!", this.time));
+            this.eventos.add();
 
             if(posseDeBola) this.golosCasa++;
             else this.golosFora++;
@@ -132,14 +132,13 @@ public class Jogo{
 
         if(aleatorio >= sumPontGeral(atacantes)) {
 
-
-            if(posseDeBola) this.eventos.add(new Eventos("Equipa " + this.equipaFora.getName() + "tomou posse de bola.", this.time));
-            else this.eventos.add(new Eventos("Equipa " + this.equipaCasa.getName() + "tomou posse de bola.", this.time));
+            if(posseDeBola) this.eventos.add();
+            else this.eventos.add();
             this.posseDeBola = !this.posseDeBola;
         }
         else {
-            if(posseDeBola) this.eventos.add(new Eventos("Equipa " + this.equipaCasa.getName() + "continua o seu ataque.", this.time));
-            else this.eventos.add(new Eventos("Equipa " + this.equipaFora.getName() + "continua o seu ataque.", this.time));
+            if(posseDeBola) this.eventos.add();
+            else this.eventos.add();
         }
 
         int playTime = rand.nextInt(4);
@@ -149,6 +148,7 @@ public class Jogo{
 
     public int sumPontGeral(List<Player> ljog){
         int sum=0;
+        int pos = 0;
         for(Player jog : ljog){
             sum += jog.getOverall();
         }
@@ -157,8 +157,11 @@ public class Jogo{
 
 
     public void correJogo(){
+        this.eventos.add(Eventos.getStartEvent());
 
         while(this.parte <= 2) {
+            if(this.parte == 2) this.eventos.add(Eventos.getStart2PartEvent());
+
             while (time < 45 * this.time ) {
                 disputaDeBola();
 
@@ -171,9 +174,11 @@ public class Jogo{
 
                 this.posseDeBola = !this.posseDeBola;
             }
+            if(this.parte == 1) this.eventos.add(Eventos.getFinish1PartEvent());
 
             this.parte ++;
             time = 45 * (parte-1); //formatar o tempo
         }
+        this.eventos.add(Eventos.getFinishEvent());
     }
 }
