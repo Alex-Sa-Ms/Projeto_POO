@@ -25,8 +25,8 @@ public class Jogo{
 
     public boolean ataque() {
         Random rand = new Random();
-        List<Player> atacantes;
-        List<Player> defensores;
+        List<AbstractMap.SimpleEntry<Player,Integer>> atacantes;
+        List<AbstractMap.SimpleEntry<Player,Integer>> defensores;
 
         int atkPower;
 
@@ -126,11 +126,11 @@ public class Jogo{
 
         atkPower = sumPontGeral(atacantes);
 
-        int total = sumPontGeral(atacantes) + sumPontGeral(defensores);
+        int total = atkPower + sumPontGeral(defensores);
 
         int aleatorio = rand.nextInt(total);
 
-        if(aleatorio >= sumPontGeral(atacantes)) {
+        if(aleatorio >= atkPower) {
 
             if(posseDeBola) this.eventos.add(Eventos.getFailedDisputaEvent(this.equipaFora.getName(), time));
             else this.eventos.add(Eventos.getFailedDisputaEvent(this.equipaCasa.getName(), time));
@@ -147,13 +147,10 @@ public class Jogo{
         this.time += 2 + playTime;
     }
 
-    public int sumPontGeral(List<Player> ljog){
-        int sum=0;
-        int pos = 0;
-        for(Player jog : ljog){
-            sum += jog.getOverall();
-        }
-        return sum;
+    public int sumPontGeral(List<AbstractMap.SimpleEntry<Player,Integer>> ljog){
+        return ljog.stream()
+                   .mapToInt(AbstractMap.SimpleEntry::getValue)
+                   .sum();
     }
 
 

@@ -258,6 +258,26 @@ public class Equipa implements Team{
         return ljog;
     }
 
+    //Retorna uma lista de SimpleEntry's em que a key é um jogador e o value é o respetivo overall do jogador na posicao em que se encontra
+    public List<AbstractMap.SimpleEntry<Player,Integer>> getStartingPlayersPlusOverallsAsList(int indexInicial, int indexFinal){
+        List<AbstractMap.SimpleEntry<Player,Integer>> ls = new ArrayList<>();
+
+        Player jog;
+        int pos;
+
+        for(int i = indexInicial; i <= indexFinal ; i++){
+            jog   = this.titulares[i].Clone();
+            pos   = this.getPosicao(i);
+            ls.add(new AbstractMap.SimpleEntry<Player,Integer>(jog, jog.getOverall(pos, i)));
+        }
+
+        return ls;
+    }
+
+    public List<AbstractMap.SimpleEntry<Player,Integer>> getPlayersPlusOverallsAsList(){
+        return getStartingPlayersPlusOverallsAsList(0, 10);
+    }
+
     /** Sets **/
 
     public void setNome(String nome) { this.nome = nome; }
@@ -266,14 +286,16 @@ public class Equipa implements Team{
         this.formacao = new Formacao(nrDefesas, nrLaterais, nrMedios, nrAvancados);
     }
 
-    public void setPontuacaoGlobal() {
-        //Soma das pontuacoes gerais de cada jogador
-        int somaPontuacoes = Arrays.stream(this.titulares)
-                                   .filter(Objects::nonNull)
-                                   .mapToInt(Player::getOverall)
-                                   .sum();
+    private void setPontuacaoGlobal() {
+        int somaPontuacoes = 0, pos;
 
-        this.pontuacaoGlobal = somaPontuacoes / 11;
+        //Soma das pontuacoes gerais de cada jogador
+        for(int i = 0; i < 11; i++) {
+            pos = this.getPosicao(i);
+            somaPontuacoes += this.titulares[i].getOverall(i, pos);
+        }
+
+        this.pontuacaoGlobal = (int) (somaPontuacoes / 11);
     }
 
     /** Inserção na equipa **/
