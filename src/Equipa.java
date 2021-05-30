@@ -198,77 +198,26 @@ public class Equipa implements Team{
         return cloneArray;
     }
 
-    public List<Player> getStartingPlayers(){
-        return Arrays.stream(this.titulares)
-                     .map(Player::Clone)
-                     .collect(Collectors.toCollection(ArrayList::new));
-    }
-
     public Map<Integer,Player> getSuplentes() {
         Map<Integer,Player> newMap = new HashMap<>();
         this.suplentes.entrySet().forEach(e -> newMap.put(e.getKey(), e.getValue().Clone()));
         return newMap;
     }
 
-    public List<Player> getStrikers(){
-        List<Player> ljog = new ArrayList<>();
-
-        int n = this.getInicioAvancados();
-        for(int i = n; i < 11; i++){
-            ljog.add(this.getTitulares()[i].Clone());
-        }
-
-        return ljog;
-    }
-
-    public List<Player> getAttackers(){
-        List<Player> ljog = new ArrayList<>();
-
-        //Clonagem dos avancados para a lista que vai ser retornada
-        int n = this.getInicioAvancados();
-        for(int i = n; i < 11; i++){
-            ljog.add(this.getTitulares()[i].Clone());
-        }
-
-        //Gerado um número de médios que vão auxiliar no ataque
-        Random rand = new Random();
-        int aleatorio = rand.nextInt(this.formacao.getNrMedios()+1);
-        List<Player> medios = new ArrayList<>();
-
-        //Copiados todos os médios para uma lista auxiliar
-        for(int i = this.getInicioMedios(); i < n; i++){
-            medios.add(this.getTitulares()[i]);
-        }
-
-        //Escolha aleatória e clonagem dos médios que vão auxiliar o ataque
-        for(int i = 0; i < aleatorio; i++){
-            int randomIndex = rand.nextInt(medios.size());
-            ljog.add(medios.get(randomIndex).Clone());
-            medios.remove(randomIndex);
-        }
-        
-        return ljog;
-    }
-
-    public List<Player> getDefenders(){
-        List<Player> ljog = new ArrayList<>();
-        for(int i = 1; i < this.getInicioMedios() ; i++){
-            ljog.add(this.getTitulares()[i].Clone());
-        }
-        return ljog;
-    }
+    /** Get Players and Overalls **/
 
     //Retorna uma lista de SimpleEntry's em que a key é um jogador e o value é o respetivo overall do jogador na posicao em que se encontra
     public List<AbstractMap.SimpleEntry<Player,Integer>> getStartingPlayersPlusOverallsAsList(int indexInicial, int indexFinal){
         List<AbstractMap.SimpleEntry<Player,Integer>> ls = new ArrayList<>();
 
         Player jog;
-        int pos;
+        int pos, areaDeJogo;
 
         for(int i = indexInicial; i <= indexFinal ; i++){
-            jog   = this.titulares[i].Clone();
-            pos   = this.getPosicao(i);
-            ls.add(new AbstractMap.SimpleEntry<Player,Integer>(jog, jog.getOverall(pos, i)));
+            jog     = this.titulares[i].Clone();
+            pos     = this.getPosicao(i);
+            areaDeJogo = this.getAreaDeJogo(i, pos);
+            ls.add(new AbstractMap.SimpleEntry<Player,Integer>(jog, jog.getOverall(pos, areaDeJogo)));
         }
 
         return ls;
@@ -276,6 +225,55 @@ public class Equipa implements Team{
 
     public List<AbstractMap.SimpleEntry<Player,Integer>> getPlayersPlusOverallsAsList(){
         return getStartingPlayersPlusOverallsAsList(0, 10);
+    }
+
+    /** Get Players and Overalls from specific positions **/
+
+    public List<AbstractMap.SimpleEntry<Player,Integer>> getStartingPlayers(){
+        return getStartingPlayersPlusOverallsAsList(0,10);
+    }
+
+    public AbstractMap.SimpleEntry<Player,Integer> getGoalKeeper(){
+        Player player = this.titulares[0].Clone();
+        return new AbstractMap.SimpleEntry<Player,Integer>(player, player.getOverall(0,1));
+    }
+
+    public List<AbstractMap.SimpleEntry<Player,Integer>> getDefenders(){
+        return getStartingPlayersPlusOverallsAsList(1, this.getInicioMedios() - 1);
+    }
+
+    //Laterais
+    public List<AbstractMap.SimpleEntry<Player,Integer>> getSideBacks(){
+        return getStartingPlayersPlusOverallsAsList(this.getInicioLaterais(), this.getInicioMedios() - 1);
+    }
+
+    public List<AbstractMap.SimpleEntry<Player,Integer>> getMidFielders(){
+        return getStartingPlayersPlusOverallsAsList(this.getInicioMedios(), this.getInicioAvancados() - 1);
+    }
+
+    public List<AbstractMap.SimpleEntry<Player,Integer>> getStrikers(){
+        return getStartingPlayersPlusOverallsAsList(this.getInicioAvancados(), 10);
+    }
+
+    public List<AbstractMap.SimpleEntry<Player,Integer>> getAttackers(){
+        //Clonagem dos avancados para a lista que vai ser retornada
+        List<AbstractMap.SimpleEntry<Player,Integer>> ljog = this.getStrikers();
+
+        //Gerado um número de médios que vão auxiliar no ataque
+        Random rand = new Random();
+        int aleatorio = rand.nextInt(this.formacao.getNrMedios() + 1);
+
+        //Copiados todos os médios para uma lista auxiliar
+        List<AbstractMap.SimpleEntry<Player,Integer>> medios = this.getMidFielders();
+
+        //Escolha aleatória e clonagem dos médios que vão auxiliar o ataque
+        for(int i = 0; i < aleatorio; i++){
+            int randomIndex = rand.nextInt(medios.size());
+            ljog.add(medios.get(randomIndex));
+            medios.remove(randomIndex);
+        }
+
+        return ljog;
     }
 
     /** Sets **/

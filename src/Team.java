@@ -1,3 +1,4 @@
+import java.util.AbstractMap;
 import java.util.List;
 
 public interface Team {
@@ -7,11 +8,13 @@ public interface Team {
 
     int getTeamOverall();
 
-    List<Player> getStartingPlayers();
+    List<AbstractMap.SimpleEntry<Player,Integer>> getStartingPlayers();
 
-    List<Player> getStrikers();
+    AbstractMap.SimpleEntry<Player,Integer> getGoalKeeper();
 
-    List<Player> getAttackers();
+    List<AbstractMap.SimpleEntry<Player,Integer>> getDefenders();
 
-    List<Player> getDefenders();
+    List<AbstractMap.SimpleEntry<Player,Integer>> getAttackers();
+
+    List<AbstractMap.SimpleEntry<Player,Integer>> getStrikers();
 }

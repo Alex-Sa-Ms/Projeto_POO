@@ -23,6 +23,16 @@ public class Jogo{
         this.eventos     = new ArrayList<>();
     }
 
+
+    /** Gera Eventos **/
+
+    public int sumPontGeral(List<AbstractMap.SimpleEntry<Player,Integer>> ljog){
+        return ljog.stream()
+                .mapToInt(AbstractMap.SimpleEntry::getValue)
+                .sum();
+    }
+
+
     public boolean ataque() {
         Random rand = new Random();
         List<AbstractMap.SimpleEntry<Player,Integer>> atacantes;
@@ -31,19 +41,19 @@ public class Jogo{
         int atkPower;
 
         if(posseDeBola) {
-            atacantes = this.equipaCasa.getAttackers().stream().map(Player::Clone).collect(Collectors.toList());
+            atacantes  = this.equipaCasa.getAttackers();
 
-            defensores = this.equipaFora.getDefenders().stream().map(Player::Clone).collect(Collectors.toList());
+            defensores = this.equipaFora.getDefenders();
         }
         else{
-            atacantes  = this.equipaFora.getAttackers().stream().map(Player::Clone).collect(Collectors.toList());
+            atacantes  = this.equipaFora.getAttackers();
 
-            defensores = this.equipaCasa.getDefenders().stream().map(Player::Clone).collect(Collectors.toList());
+            defensores = this.equipaCasa.getDefenders();
         }
 
         atkPower = sumPontGeral(atacantes);
 
-        int total = 2*atkPower + sumPontGeral(defensores);
+        int total = 2 * atkPower + sumPontGeral(defensores);
 
         int aleatorio = rand.nextInt(total);
 
@@ -61,29 +71,25 @@ public class Jogo{
 
     public boolean remate() {
         Random rand = new Random();
-        Player striker;
-        Player guardaRedes;
+        AbstractMap.SimpleEntry<Player,Integer> striker;
+        AbstractMap.SimpleEntry<Player,Integer> guardaRedes;
 
         if(posseDeBola) {
-            List<Player> atacantes = this.equipaCasa.getStrikers().stream().map(Player::Clone).collect(Collectors.toList());
-
-            striker = atacantes.get(rand.nextInt(atacantes.size())).Clone();
-
-            guardaRedes = this.equipaFora.getStartingPlayers().get(0).Clone();
+            List<AbstractMap.SimpleEntry<Player,Integer>> atacantes = this.equipaCasa.getStrikers();
+            striker     = atacantes.get(rand.nextInt(atacantes.size()));
+            guardaRedes = this.equipaFora.getGoalKeeper();
         }
         else{
-            List<Player> atacantes = this.equipaFora.getStrikers().stream().map(Player::Clone).collect(Collectors.toList());
-
-            striker = atacantes.get(rand.nextInt(atacantes.size())).Clone();
-
-            guardaRedes = this.equipaCasa.getStartingPlayers().get(0).Clone();
+            List<AbstractMap.SimpleEntry<Player,Integer>> atacantes = this.equipaFora.getStrikers();
+            striker     = atacantes.get(rand.nextInt(atacantes.size()));
+            guardaRedes = this.equipaCasa.getGoalKeeper();
         }
 
         int total;
         if(rand.nextBoolean())
-            total = guardaRedes.getOverall(0,0) + striker.getStrike();
+            total = guardaRedes.getValue() + striker.getKey().getStrike();
         else
-            total = guardaRedes.getOverall(0,0) + striker.getHeadGame();
+            total = guardaRedes.getValue() + striker.getKey().getHeadGame();
 
         int aleatorio = rand.nextInt(total);
 
@@ -91,12 +97,12 @@ public class Jogo{
 
         this.time += playTime;
 
-        if (aleatorio < guardaRedes.getOverall(0,0)) {
-            this.eventos.add(Eventos.getFailedStrikeEvent( striker.getName(), time));
+        if (aleatorio < guardaRedes.getValue()) {
+            this.eventos.add(Eventos.getFailedStrikeEvent( striker.getKey().getName(), time));
             return false;
         }
         else{
-            this.eventos.add(Eventos.getSucessfulStrikeEvent( striker.getName(), time));
+            this.eventos.add(Eventos.getSucessfulStrikeEvent( striker.getKey().getName(), time));
 
             if(posseDeBola) this.golosCasa++;
             else this.golosFora++;
@@ -108,8 +114,8 @@ public class Jogo{
 
     public void disputaDeBola(){
         Random rand = new Random();
-        List<Player> atacantes;
-        List<Player> defensores;
+        List<AbstractMap.SimpleEntry<Player,Integer>> atacantes;
+        List<AbstractMap.SimpleEntry<Player,Integer>> defensores;
 
         int atkPower;
 
@@ -147,12 +153,7 @@ public class Jogo{
         this.time += 2 + playTime;
     }
 
-    public int sumPontGeral(List<AbstractMap.SimpleEntry<Player,Integer>> ljog){
-        return ljog.stream()
-                   .mapToInt(AbstractMap.SimpleEntry::getValue)
-                   .sum();
-    }
-
+    /** Simula Jogo **/
 
     public void correJogo(){
         this.eventos.add(Eventos.getStartEvent(time));
