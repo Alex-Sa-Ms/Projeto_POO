@@ -11,8 +11,10 @@ public class InfoJogo {
     private LocalDate data;
     private int golosCasa;
     private int golosFora;
-    private List<Integer> jogadoresIniciais;
-    private Map<Integer, Integer> substituices;
+    private List<Integer> jogadoresIniciaisCasa;
+    private List<Integer> jogadoresIniciaisFora;
+    private Map<Integer, Integer> substituicoesCasa;
+    private Map<Integer, Integer> substituicoesFora;
 
     public InfoJogo() {
         this.equipaCasa = "";
@@ -20,18 +22,22 @@ public class InfoJogo {
         this.data = LocalDate.now();
         this.golosCasa = 0;
         this.golosFora = 0;
-        this.jogadoresIniciais = new ArrayList<>();
-        this.substituices = new HashMap<>();
+        this.jogadoresIniciaisCasa = new ArrayList<>();
+        this.jogadoresIniciaisFora = new ArrayList<>();
+        this.substituicoesCasa = new HashMap<>();
+        this.substituicoesFora = new HashMap<>();
     }
 
-    public InfoJogo(String equipaCasa, String equipaFora, LocalDate data, int golosCasa, int golosFora, List<Integer> jogadoresIniciais, Map<Integer, Integer> substituices) {
+    public InfoJogo(String equipaCasa, String equipaFora, LocalDate data, int golosCasa, int golosFora, List<Integer> jogadoresIniciaisCasa, List<Integer> jogadoresIniciaisFora, Map<Integer, Integer> substituicoesCasa, Map<Integer, Integer> substituicoesFora) {
         this.equipaCasa = equipaCasa;
         this.equipaFora = equipaFora;
         this.data = data;
         this.golosCasa = golosCasa;
         this.golosFora = golosFora;
-        this.jogadoresIniciais = jogadoresIniciais.stream().collect(Collectors.toList());
-        this.substituices = substituices.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        this.jogadoresIniciaisCasa = jogadoresIniciaisCasa.stream().collect(Collectors.toList());
+        this.jogadoresIniciaisFora = jogadoresIniciaisFora.stream().collect(Collectors.toList());
+        this.substituicoesCasa = substituicoesCasa.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        this.substituicoesFora = substituicoesFora.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     //getters
@@ -55,12 +61,20 @@ public class InfoJogo {
         return this.golosFora;
     }
 
-    public List<Integer> getJogadoresIniciais() {
-        return this.jogadoresIniciais.stream().collect(Collectors.toList());
+    public List<Integer> getJogadoresIniciaisCasa() {
+        return this.jogadoresIniciaisCasa.stream().collect(Collectors.toList());
     }
 
-    public Map<Integer, Integer> getSubstituices() {
-        return this.substituices.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    public List<Integer> getJogadoresIniciaisFora() {
+        return this.jogadoresIniciaisFora.stream().collect(Collectors.toList());
+    }
+
+    public Map<Integer, Integer> getSubstituicesCasa() {
+        return this.substituicoesCasa.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public Map<Integer, Integer> getSubstituicesFora() {
+        return this.substituicoesFora.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     //setters
@@ -83,11 +97,19 @@ public class InfoJogo {
         this.golosFora = golosFora;
     }
 
-    public void setJogadoresIniciais(List<Integer> jogadoresIniciais) {
-        this.jogadoresIniciais = jogadoresIniciais.stream().collect(Collectors.toList());
+    public void setJogadoresIniciaisCasa(List<Integer> jogadoresIniciais) {
+        this.jogadoresIniciaisCasa = jogadoresIniciais.stream().collect(Collectors.toList());
     }
 
-    public void setSubstituices(Map<Integer, Integer> substituices) {
-        this.substituices = substituices.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    public void setJogadoresIniciaisFora(List<Integer> jogadoresIniciais) {
+        this.jogadoresIniciaisFora = jogadoresIniciais.stream().collect(Collectors.toList());
+    }
+
+    public void setSubstituicesCasa(Map<Integer, Integer> substituices) {
+        this.substituicoesCasa = substituices.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public void setSubstituicesFora(Map<Integer, Integer> substituices) {
+        this.substituicoesFora = substituices.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }
