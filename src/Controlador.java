@@ -1,10 +1,23 @@
 public class Controlador {
+    private Catalogo catalogo;
 
-    public Controlador(){ }
+    public Controlador(Catalogo catalogo){
+        this.catalogo = catalogo;
+    }
 
-    public void runControlador(){
-        /*Team equipaCasa = new Equipa();
-        Team equipaFora = new Equipa();
-        Jogo jogo = new Jogo(equipaCasa, equipaFora);*/
+    public void criaJogador(String[] parametros){
+        this.catalogo.criaJogador(parametros);
+    }
+
+    public String getJogador(int index){
+        return this.catalogo.getJogadorString(index);
+    }
+
+    public String[] getArrayNomesJogadores(){
+        return this.catalogo.getNomesJogadores();
+    }
+
+    public String getInfoJogo(int index){
+        return this.catalogo.getInfoJogoString(index);
     }
 }
