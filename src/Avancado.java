@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Random;
 
 public class Avancado extends Jogador {
     private int finalizacao;
@@ -10,6 +11,7 @@ public class Avancado extends Jogador {
 
     public Avancado(String nome){
         super(nome);
+        this.setAreaDeJogo(Jogador.randomAreaDeJogo(false));
         this.finalizacao    = 50;
         this.salto          = 50;
         this.efeito         = 50;
@@ -135,5 +137,27 @@ public class Avancado extends Jogador {
                 (this.getSalto()) * 0.1 +
                 (this.getFinalizacao()) * 0.15) ;
 
+    }
+
+    //Parse
+
+    public static Avancado parse(String input){
+        String[] campos = input.split(",");
+        Random rand = new Random();
+        return new Avancado(campos[0],
+                Jogador.randomAreaDeJogo(false),
+                Integer.parseInt(campos[1]),
+                Integer.parseInt(campos[2]),
+                Integer.parseInt(campos[3]),
+                Integer.parseInt(campos[4]),
+                Integer.parseInt(campos[5]),
+                Integer.parseInt(campos[6]),
+                Integer.parseInt(campos[7]),
+                Integer.parseInt(campos[8]),
+                null,
+                rand.nextInt(100),
+                rand.nextInt(100),
+                rand.nextInt(100),
+                rand.nextInt(100));
     }
 }

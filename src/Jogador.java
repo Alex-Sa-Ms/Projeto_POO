@@ -22,7 +22,6 @@ public abstract class Jogador implements Player{
     public Jogador(String nome) {
         Random random = new Random();
         this.nome             = nome;
-        this.areaDeJogo       = randomAreaDeJogo();
         this.nrCamisola       = random.nextInt(100);
         this.pontuacaoGeral   = 50;
         this.velocidade       = 50;
@@ -120,13 +119,6 @@ public abstract class Jogador implements Player{
 
     public void setAreaDeJogo(AreaDeJogo areaDeJogo) { this.areaDeJogo = areaDeJogo; }
 
-    private void setRandomAreaDeJogo(){
-        int rand = new Random().nextInt(3);
-        if(rand == 0) this.areaDeJogo = AreaDeJogo.ESQUERDO;
-        else if (rand == 1) this.areaDeJogo = AreaDeJogo.CENTRO;
-        else this.areaDeJogo = AreaDeJogo.DIREITO;
-    }
-
     public void setShirtNumber(int nrCamisola) { this.nrCamisola = nrCamisola; }
 
     public void setPontuacaoGeral(){ this.pontuacaoGeral = this.calculaPontuacaoGeral(); }
@@ -168,16 +160,19 @@ public abstract class Jogador implements Player{
         this.historialClubes.add(clubName);
     }
 
-    /* Retorna uma area de jogo aleatória */
-    public AreaDeJogo randomAreaDeJogo(){
-        int random = new Random().nextInt(3);
+    /* Retorna uma area de jogo aleatória (Para medios e avancados usar como argumento 'false' e para lateral 'true')*/
+    public static AreaDeJogo randomAreaDeJogo(boolean isLateral){
+        int nrAreasJogo = 3;
+        if(isLateral) nrAreasJogo = 2;
+        int random = new Random().nextInt(nrAreasJogo);
         if(random == 0)
             return AreaDeJogo.ESQUERDO;
         else if (random == 1)
-            return AreaDeJogo.CENTRO;
-        else
             return AreaDeJogo.DIREITO;
+        else
+            return AreaDeJogo.CENTRO;
     }
+
 
     /* Calcula a pontuação geral de um jogador em função da sua subclasse */
     public abstract int calculaPontuacaoGeral();
@@ -186,9 +181,17 @@ public abstract class Jogador implements Player{
     public abstract Jogador clone();
 
     //toString
+    public String areaDeJogoToString(){
+        if(this.areaDeJogo == AreaDeJogo.CENTRO) return "Centro";
+        else if(this.areaDeJogo == AreaDeJogo.ESQUERDO) return "Esquerda";
+        else return "Direita";
+    }
+
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("Name: ").append(this.nome).append("\n")
+          .append("Posicao: ").append(this.getClass().getSimpleName()).append("\n")
+          .append("Area de Jogo: ").append(this.areaDeJogoToString()).append("\n")
           .append("Nº da Camisola: ").append(this.nrCamisola).append("\n")
           .append("Velocidade: ").append(this.velocidade).append("\n")
           .append("Resistência: ").append(this.resistencia).append("\n")

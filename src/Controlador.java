@@ -94,7 +94,7 @@ public class Controlador extends Observable implements Observer {
     public void update(Observable o, Object arg) {
         List<Eventos> ls = (List<Eventos>) arg;
         int last = ls.size() - 1;
-        evento = ls.get(last).getEventDescription();
+        evento = ls.get(last).toString();
         setChanged();
         notifyObservers(evento);
     }
@@ -126,10 +126,23 @@ public class Controlador extends Observable implements Observer {
     public int guardaEstado(String nomeFicheiro){
         try {
             this.catalogo.guardaEstado(nomeFicheiro);
+            return 0;
+        }
+        catch (java.io.FileNotFoundException fnfe){
+            return 0;
         }
         catch (java.io.IOException fnfe) {
             return 1;
         }
-        return 0;
+    }
+
+    public int lerEstadoLog(String nomeFicheiro){
+        try {
+            this.catalogo = Parser.parse(nomeFicheiro);
+            return 0;
+        }
+        catch (LinhaIncorretaException e){
+            return 1;
+        }
     }
 }

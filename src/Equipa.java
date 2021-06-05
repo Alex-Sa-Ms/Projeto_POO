@@ -437,7 +437,7 @@ public class Equipa implements Team{
         //Procura nos titulares
         for(int i = 0 ; i < 11; i++){
             jog = this.titulares[i];
-            if(jog.getName().equals(name)){
+            if(jog != null && jog.getName().equals(name)){
                 this.titulares[i] = null;
                 return jog;
             }
@@ -507,5 +507,12 @@ public class Equipa implements Team{
 
     public boolean prontaParaJogar(){
         return Arrays.stream(this.titulares).filter(Objects::nonNull).count() == 11;
+    }
+
+    /** Parse **/
+
+    public static Equipa parse(String input){
+        String[] campos = input.split(",");
+        return new Equipa(campos[0]);
     }
 }

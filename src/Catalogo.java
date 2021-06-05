@@ -1,14 +1,16 @@
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 
 public class Catalogo extends Observable implements Observer, Serializable {
-    private List<Jogador> jogadoresSemEquipa;
-    private Map<String,List<Jogador>> jogadores; //Jogadores associados ao nome da equipa.
     private int nrJogadores;
-    private Map<String,Equipa> equipas; //Equipas associadas ao seu nome
-    private List<InfoJogo> historicoDeJogos;
+    private final List<Jogador> jogadoresSemEquipa;
+    private final Map<String,List<Jogador>> jogadores; //Jogadores associados ao nome da equipa.
+    private final Map<String,Equipa> equipas; //Equipas associadas ao seu nome
+    private final List<InfoJogo> historicoDeJogos;
     private Jogo novoJogo;
 
     public Catalogo(){
@@ -17,6 +19,10 @@ public class Catalogo extends Observable implements Observer, Serializable {
         this.jogadores          = new HashMap<>();
         this.historicoDeJogos   = new ArrayList<>();
         this.equipas            = new HashMap<>();
+
+
+        /*
+        //Quick Test
 
         Equipa equipaCasa = new Equipa("SLB");
         Equipa equipaFora = new Equipa("FCP");
@@ -90,7 +96,7 @@ public class Catalogo extends Observable implements Observer, Serializable {
         equipaFora.addJogadorSuplente(j30);
 
         this.addEquipa(equipaCasa);
-        this.addEquipa(equipaFora);
+        this.addEquipa(equipaFora);*/
     }
 
     //getters
@@ -209,14 +215,16 @@ public class Catalogo extends Observable implements Observer, Serializable {
     //Auxiliar de addJogador
     private void insertJogador(Jogador jog, String nomeEquipa){
         if(jog == null) return;
+        Jogador jogador = jog.clone();
 
         //Caso 'nomeEquipa' seja 'null',ou se nao existir qualquer equipa com esse nome, o jogador é inserido na lista 'jogadoresSemEquipa'
         if(nomeEquipa == null || !this.equipas.containsKey(nomeEquipa))
-            this.jogadoresSemEquipa.add(jog);
+            this.jogadoresSemEquipa.add(jogador);
             //Se o nomeEquipa for válido
         else {
-            this.jogadores.get(nomeEquipa).add(jog.clone());
-            this.equipas.get(nomeEquipa).addJogadorSuplente(jog);
+            jogador.setNewCurrentClub(nomeEquipa);
+            this.jogadores.get(nomeEquipa).add(jogador);
+            this.equipas.get(nomeEquipa).addJogadorSuplente(jogador);
         }
     }
 
@@ -368,6 +376,12 @@ public class Catalogo extends Observable implements Observer, Serializable {
         return r;
     }
 
+    /** InfoJogo **/
+    public void addInfoJogo(InfoJogo ij){
+        if(ij != null)
+            this.historicoDeJogos.add(ij.clone());
+    }
+
     /** Ler e guardar estado **/
 
     public static Catalogo carregaEstado(String nomeFicheiro) throws FileNotFoundException, IOException, ClassNotFoundException {
@@ -376,8 +390,8 @@ public class Catalogo extends Observable implements Observer, Serializable {
         return (Catalogo) ois.readObject();
     }
 
-    public void guardaEstado(String nomeFicheiro) throws IOException {
-        if(nomeFicheiro == null) nomeFicheiro = "save.fma";
+    public void guardaEstado(String nomeFicheiro) throws FileNotFoundException, IOException {
+        if(nomeFicheiro.equals("")) nomeFicheiro = "save.fma";
         else nomeFicheiro = nomeFicheiro + ".fma";
         FileOutputStream fos = new FileOutputStream(nomeFicheiro);
         ObjectOutputStream oos = new ObjectOutputStream(fos);

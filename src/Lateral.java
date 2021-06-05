@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Random;
 
 public class Lateral extends Jogador{
     private int cruzamento;
@@ -107,5 +108,25 @@ public class Lateral extends Jogador{
                 (this.getCruzamento()) * 0.15 +
                 (this.getDrible()) * 0.15 );
 
+    }
+
+    //Parse
+
+    public static Lateral parse(String input){
+        String[] campos = input.split(",");
+        Random rand = new Random();
+        return new Lateral(campos[0],
+                Jogador.randomAreaDeJogo(true),
+                Integer.parseInt(campos[1]),
+                Integer.parseInt(campos[2]),
+                Integer.parseInt(campos[3]),
+                Integer.parseInt(campos[4]),
+                Integer.parseInt(campos[5]),
+                Integer.parseInt(campos[6]),
+                Integer.parseInt(campos[7]),
+                Integer.parseInt(campos[8]),
+                null,
+                Integer.parseInt(campos[9]),
+                rand.nextInt(100));
     }
 }

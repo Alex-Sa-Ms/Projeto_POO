@@ -1,4 +1,6 @@
+import java.awt.geom.Area;
 import java.util.List;
+import java.util.Random;
 
 public class Defesa extends Jogador{
     private int defesa;
@@ -135,5 +137,27 @@ public class Defesa extends Jogador{
                 (this.getForca()) * 0.1 +
                 (this.getMarcacao()) * 0.15 );
 
+    }
+
+    //Parse
+
+    public static Defesa parse(String input){
+        String[] campos = input.split(",");
+        Random rand = new Random();
+        return new Defesa(campos[0],
+                AreaDeJogo.CENTRO,
+                Integer.parseInt(campos[1]),
+                Integer.parseInt(campos[2]),
+                Integer.parseInt(campos[3]),
+                Integer.parseInt(campos[4]),
+                Integer.parseInt(campos[5]),
+                Integer.parseInt(campos[6]),
+                Integer.parseInt(campos[7]),
+                Integer.parseInt(campos[8]),
+                null,
+                rand.nextInt(100),
+                rand.nextInt(100),
+                rand.nextInt(100),
+                rand.nextInt(100));
     }
 }

@@ -28,6 +28,18 @@ public class InfoJogo {
         this.substituicoesFora = new HashMap<>();
     }
 
+    public InfoJogo(String equipaCasa, String equipaFora, int golosCasa, int golosFora, LocalDate data, List<Integer> jogadoresIniciaisCasa, Map<Integer,Integer> substituicoesCasa, List<Integer> jogadoresIniciaisFora, Map<Integer, Integer> substituicoesFora ) {
+        this.equipaCasa = equipaCasa;
+        this.equipaFora = equipaFora;
+        this.data = data;
+        this.golosCasa = 0;
+        this.golosFora = 0;
+        this.jogadoresIniciaisCasa = new ArrayList<>(jogadoresIniciaisCasa);
+        this.jogadoresIniciaisFora = new ArrayList<>(jogadoresIniciaisFora);
+        this.substituicoesCasa = new HashMap<>(substituicoesCasa);
+        this.substituicoesFora = new HashMap<>(substituicoesFora);
+    }
+
     public InfoJogo(InfoJogo ij){
         this.equipaCasa = ij.getEquipaCasa();
         this.equipaFora = ij.getEquipaFora();
@@ -133,5 +145,35 @@ public class InfoJogo {
           .append("Substituicoes (Equipa Fora): ").append(substituicoesFora).append("\n\n");
 
         return sb.toString();
+    }
+
+    /** Parse **/
+
+    public static InfoJogo parse(String input){
+        String[] campos = input.split(",");
+        String[] data = campos[4].split("-");
+        List<Integer> jc = new ArrayList<>();
+        List<Integer> jf = new ArrayList<>();
+        Map<Integer, Integer> subsC = new HashMap<>();
+        Map<Integer, Integer> subsF = new HashMap<>();
+
+        for (int i = 5; i < 16; i++){
+            jc.add(Integer.parseInt(campos[i]));
+        }
+        for (int i = 16; i < 19; i++){
+            String[] sub = campos[i].split("->");
+            subsC.put(Integer.parseInt(sub[0]), Integer.parseInt(sub[1]));
+        }
+        for (int i = 19; i < 30; i++){
+            jf.add(Integer.parseInt(campos[i]));
+        }
+        for (int i = 30; i < 33; i++){
+            String[] sub = campos[i].split("->");
+            subsF.put(Integer.parseInt(sub[0]), Integer.parseInt(sub[1]));
+        }
+
+        return new InfoJogo(campos[0], campos[1], Integer.parseInt(campos[2]), Integer.parseInt(campos[3]),
+                LocalDate.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]), Integer.parseInt(data[2])),
+                jc, subsC, jf, subsF);
     }
 }

@@ -101,6 +101,10 @@ public class Vista implements Observer {
                     break;
                 case 9:
                     System.out.print("Introduza o nome do ficheiro(log) do qual pretende ler o estado: ");
+                    if(this.controlador.lerEstadoLog(new Scanner(System.in).nextLine()) == 0)
+                        System.out.println("Estado lido com sucesso!");
+                    else
+                        System.out.println("Não foi possível ler o ficheiro! Ficheiro mal formatado!");
                     break;
                 default:
                     break;

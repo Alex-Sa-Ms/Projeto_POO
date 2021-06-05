@@ -158,7 +158,7 @@ public class Jogo extends Observable {
 
         int aleatorio = rand.nextInt(total);
 
-        int playTime = rand.nextInt(2);
+        int playTime = rand.nextInt(2); Jogo.delayer(playTime);
 
         this.time += playTime;
 
@@ -226,9 +226,9 @@ public class Jogo extends Observable {
         setChanged();
         notifyObservers(this.eventos);
 
-        int playTime = rand.nextInt(4);
+        int playTime = 2 + rand.nextInt(4); Jogo.delayer(playTime);
 
-        this.time += (2 + playTime);
+        this.time += playTime;
     }
 
     public InfoJogo getResumoJogo() {
@@ -236,6 +236,18 @@ public class Jogo extends Observable {
     }
 
     /** Simula Jogo **/
+
+    //Delayer
+    private static void delayer(int minutesInGame){
+        try
+        {
+            Thread.sleep(300L * minutesInGame);
+        }
+        catch(InterruptedException ex)
+        {
+            Thread.currentThread().interrupt();
+        }
+    }
 
     //Retorna o número da parte que simulou, ou -1 se já tivesse terminado
     public int correJogo(){
