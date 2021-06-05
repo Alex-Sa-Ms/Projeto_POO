@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Random;
 
-public class Eventos{
+public class Eventos implements Serializable {
     private String descricao;
     private int tempo;
 
@@ -31,7 +32,7 @@ public class Eventos{
         int aleatorio = rand.nextInt(3);
 
         if(aleatorio == 0) return new Eventos("Grande golo de " + jog + "!", time);
-        else if(aleatorio == 1) return new Eventos("Golo! Mas que finalização de" + jog + "!", time);
+        else if(aleatorio == 1) return new Eventos("Golo! Mas que finalização de " + jog + "!", time);
         else return new Eventos("Inacreditável! Mas que golo! Fantástico remate de " + jog + "!", time);
     }
 

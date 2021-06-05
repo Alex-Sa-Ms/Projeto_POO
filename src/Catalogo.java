@@ -21,7 +21,7 @@ public class Catalogo extends Observable implements Observer, Serializable {
         this.equipas            = new HashMap<>();
 
 
-        /*
+
         //Quick Test
 
         Equipa equipaCasa = new Equipa("SLB");
@@ -96,7 +96,7 @@ public class Catalogo extends Observable implements Observer, Serializable {
         equipaFora.addJogadorSuplente(j30);
 
         this.addEquipa(equipaCasa);
-        this.addEquipa(equipaFora);*/
+        this.addEquipa(equipaFora);
     }
 
     //getters
@@ -216,15 +216,21 @@ public class Catalogo extends Observable implements Observer, Serializable {
     private void insertJogador(Jogador jog, String nomeEquipa){
         if(jog == null) return;
         Jogador jogador = jog.clone();
+        int nrCamisola;
 
         //Caso 'nomeEquipa' seja 'null',ou se nao existir qualquer equipa com esse nome, o jogador é inserido na lista 'jogadoresSemEquipa'
         if(nomeEquipa == null || !this.equipas.containsKey(nomeEquipa))
             this.jogadoresSemEquipa.add(jogador);
             //Se o nomeEquipa for válido
         else {
+            //Atualiza o historial de clubes
             jogador.setNewCurrentClub(nomeEquipa);
+
+            //Atualiza o nr de camisola que pode ter sido alterado ao inserir numa equipa, para que dps este jogador possa ser inserido na lista de jogadores
+            nrCamisola = this.equipas.get(nomeEquipa).addJogadorSuplente(jogador);
+            jogador.setShirtNumber(nrCamisola);
+
             this.jogadores.get(nomeEquipa).add(jogador);
-            this.equipas.get(nomeEquipa).addJogadorSuplente(jogador);
         }
     }
 
@@ -264,7 +270,7 @@ public class Catalogo extends Observable implements Observer, Serializable {
 
     public boolean mudaJogadorDeEquipa(int index, String nomeEquipa){
         //Verifica se a equipa existe
-        if(nomeEquipa == null || !this.equipas.containsKey(nomeEquipa))
+        if(nomeEquipa == null || !this.equipas.containsKey(nomeEquipa) || index >= this.nrJogadores)
             return false;
 
         //Obtem o apontador para o jogador pretendido e elimina a referencia da lista da equipa atual
@@ -276,13 +282,19 @@ public class Catalogo extends Observable implements Observer, Serializable {
             this.jogadoresSemEquipa.remove(index);
         }
         else{
+            boolean found = false;
             index -= this.jogadoresSemEquipa.size();
 
-            for(Map.Entry<String,List<Jogador>> entry : this.jogadores.entrySet()){
+            Iterator<Map.Entry<String,List<Jogador>>> it = this.jogadores.entrySet().iterator();
+
+            while(!found && it.hasNext()){
+                Map.Entry<String,List<Jogador>> entry = it.next();
+
                 if(index < entry.getValue().size()) {
                     jog = entry.getValue().get(index);
                     entry.getValue().remove(index);
                     nomeEquipaAtual = entry.getKey();
+                    found = true;
                 }
                 else
                     index -= entry.getValue().size();
@@ -294,10 +306,10 @@ public class Catalogo extends Observable implements Observer, Serializable {
 
         //Se 'nomeEquipaAtual' == null entao nao é preciso retirar o jogador de uma equipa
         if(nomeEquipaAtual != null)
-            this.equipas.get(nomeEquipaAtual).removeJogador(jog.getName());
+            this.equipas.get(nomeEquipaAtual).removeJogador(jog.getShirtNumber());
 
         //Adiciona o jogador na nova equipa
-        this.insertJogador(jog,nomeEquipa);
+        this.insertJogador(jog, nomeEquipa);
 
         return true;
     }
@@ -336,7 +348,7 @@ public class Catalogo extends Observable implements Observer, Serializable {
 
     public String[] getArrayInfoGenericaJogadores(String nomeEquipa){
         Equipa equipa = this.equipas.get(nomeEquipa);
-        String[] infosGenericas = new String[equipa.numberOfPlayers()];
+        String[] infosGenericas = new String[11 + equipa.numberOfReplacements()];
         String aux;
         int index = 0;
 
@@ -353,9 +365,13 @@ public class Catalogo extends Observable implements Observer, Serializable {
         return infosGenericas;
     }
 
+    //Retorna -1 se nao existir jogador para aquela posicao
     public int getNumeroCamisolaJogador(int index, String nomeEquipa){
         Equipa equipa = this.equipas.get(nomeEquipa);
-        return equipa.getPlayer(index).getShirtNumber();
+        Player player = equipa.getPlayer(index);
+
+        if(player == null) return -1;
+        else return equipa.getPlayer(index).getShirtNumber();
     }
 
     public boolean numeroCamisolaJogadorValido(int numeroCamisola, String nomeEquipa){
@@ -374,6 +390,11 @@ public class Catalogo extends Observable implements Observer, Serializable {
         }
 
         return r;
+    }
+
+    public void insereJogador(int pos, int numeroCamisolaSubstituto, String nomeEquipa){
+        Equipa equipa = this.equipas.get(nomeEquipa);
+        equipa.insertJogador(pos, numeroCamisolaSubstituto);
     }
 
     /** InfoJogo **/

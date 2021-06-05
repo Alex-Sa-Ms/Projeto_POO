@@ -1,8 +1,9 @@
 import java.awt.image.AreaAveragingScaleFilter;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Equipa implements Team{
+public class Equipa implements Team, Serializable {
     private String nome;
     private int pontuacaoGlobal;
     private Formacao formacao;
@@ -24,9 +25,12 @@ public class Equipa implements Team{
     }
 
     public int existeEmTitulares(int nrCamisola){
-        for(int index = 0; index < 11 ; index++)
-            if(this.titulares[index].getShirtNumber() == nrCamisola)
+        Player player;
+        for(int index = 0; index < 11 ; index++) {
+            player = this.titulares[index];
+            if (player != null && player.getShirtNumber() == nrCamisola)
                 return index;
+        }
         return -1;
     }
 
@@ -122,7 +126,9 @@ public class Equipa implements Team{
     public int getTeamOverall() { return this.pontuacaoGlobal; }
 
     public Player getPlayer(int pos) {
-        return this.titulares[pos].Clone();
+        Player player = this.titulares[pos];
+        if(player != null) return this.titulares[pos].Clone();
+        else return null;
     }
 
     // ** Funçoes sobre as Formacoes **
@@ -197,6 +203,10 @@ public class Equipa implements Team{
 
     public int numberOfPlayers(){
         return (int) (Arrays.stream(this.titulares).filter(Objects::nonNull).count() + this.suplentes.size());
+    }
+
+    public int numberOfReplacements(){
+        return this.suplentes.size();
     }
 
     public Player[] getTitulares(){
@@ -366,12 +376,41 @@ public class Equipa implements Team{
         return true;
     }
 
+    //pos é o index onde se pretende inserir o jogador com numero de camisola igual a 'nrCamisola'
+    public boolean insertJogador(int pos, int nrCamisola){
+        if(pos < 0 || pos > 10) return false;
+
+        Player playerASubstituir = this.titulares[pos], playerSubstituto;
+        int index = this.existeEmTitulares(nrCamisola);
+
+        //Se existir em titulares
+        if(index != -1){
+            playerSubstituto = this.titulares[index];
+            this.titulares[index] = null;
+
+        }
+        else if(this.existeEmSuplentes(nrCamisola)){
+            playerSubstituto = this.suplentes.get(nrCamisola);
+            this.suplentes.remove(nrCamisola);
+        }
+        else return false;
+
+        //Insercao do jogador substituto na posicao
+        this.titulares[pos] = playerSubstituto;
+
+        //Insercao do jogador substituido nos suplentes
+        if(playerASubstituir != null)
+            this.suplentes.put(playerASubstituir.getShirtNumber(),playerASubstituir);
+
+        return true;
+    }
+
     //Esta função tenta inserir um jogador, que não exista na equipa, começando no indice 'index' fornecido até 'limite' - 1. Um jogador só é inserido numa posição null.
-    //Retorna true caso consiga inserir, e false caso contrário.
+    //Retorna 'nrCamisola' caso consiga inserir, e -1 caso contrário.
     //Também atualiza a pontuação global da equipa
-    private boolean tentaInserirTitular(Player jog, int index, int limite){
+    private int tentaInserirTitular(Player jog, int index, int limite){
         //Verifica se já existe um jogador igual a este no plantel
-        if(jog == null || this.existeNaEquipa(jog)) return false;
+        if(jog == null || this.existeNaEquipa(jog)) return -1;
 
         //Clona e altera número da camisola caso seja necessário.
         Player jogClone = cloneAndModNrCamisola(jog);
@@ -381,56 +420,79 @@ public class Equipa implements Team{
             if(this.titulares[index] == null){
                 this.titulares[index] = jogClone;
                 this.setPontuacaoGlobal();
-                return true;
+                return jogClone.getShirtNumber();
             }
         }
-        return false;
+        return -1;
     }
 
     //Retorna:
-    //  false se já existirem 11 titulares, ou se o jogador for 'null'
-    //  true se for adicionado com sucesso. É adicionado na primeira vaga.
-    public boolean addJogadorTitular(Player jog){
+    //  -1 se já existirem 11 titulares, ou se o jogador for 'null'
+    //  'nrCamisola' se for adicionado com sucesso. É adicionado na primeira vaga.
+    public int addJogadorTitular(Player jog){
         return tentaInserirTitular(jog, 0, 11);
     }
 
     //Retorna:
-    //  false se for 'null'
-    //  true se for adicionado com sucesso. É adicionado na primeira vaga.
-    public void addJogadorSuplente(Player jog){
-        if(jog == null || this.existeNaEquipa(jog)) return;
+    //  -1 se for 'null'
+    //  'nrCamisola' se for adicionado com sucesso. É adicionado na primeira vaga.
+    public int addJogadorSuplente(Player jog){
+        if(jog == null || this.existeNaEquipa(jog)) return -1;
 
         //Clona e altera número da camisola caso seja necessário.
         Player jogClone = cloneAndModNrCamisola(jog);
 
         this.suplentes.put(jogClone.getShirtNumber(), jogClone);
+
+        return jogClone.getShirtNumber();
     }
 
     //Retorna:
-    //  false se já existir um guarda-redes ou se já existir na equipa.
-    //  true se for adicionado com sucesso.
-    public boolean addJogadorComoGuardaRedes(Player jog){
-        if(jog == null || this.titulares[0] != null || this.existeNaEquipa(jog)) return false;
+    //  -1 se já existir um guarda-redes ou se já existir na equipa.
+    //  'nrCamisola' se for adicionado com sucesso.
+    public int addJogadorComoGuardaRedes(Player jog){
+        if(jog == null || this.titulares[0] != null || this.existeNaEquipa(jog)) return -1;
         Player jogClone = cloneAndModNrCamisola(jog);
         this.titulares[0] = jogClone;
         this.setPontuacaoGlobal();
-        return true;
+        return jogClone.getShirtNumber();
     }
 
     // Para todas as funções addJogadorComo* :
     //      Retorna:
-    //          false se já existirem jogadores em todos os indices especificos do array para essa posição, ou se já existir na equipa.
-    //          true se for adicionado com sucesso.
-    public boolean addJogadorComoDefesa(Player jog)  { return tentaInserirTitular(jog, this.getInicioDefesas(), this.getInicioLaterais()); }
+    //          -1 se já existirem jogadores em todos os indices especificos do array para essa posição, ou se já existir na equipa.
+    //          'nrCamisola' se for adicionado com sucesso.
+    public int addJogadorComoDefesa(Player jog)  { return tentaInserirTitular(jog, this.getInicioDefesas(), this.getInicioLaterais()); }
 
-    public boolean addJogadorComoLateral(Player jog) { return tentaInserirTitular(jog, this.getInicioLaterais(), this.getInicioMedios()); }
+    public int addJogadorComoLateral(Player jog) { return tentaInserirTitular(jog, this.getInicioLaterais(), this.getInicioMedios()); }
 
-    public boolean addJogadorComoMedio(Player jog)   { return tentaInserirTitular(jog, this.getInicioMedios(), this.getInicioAvancados()); }
+    public int addJogadorComoMedio(Player jog)   { return tentaInserirTitular(jog, this.getInicioMedios(), this.getInicioAvancados()); }
 
-    public boolean addJogadorComoAvancado(Player jog){ return tentaInserirTitular(jog, this.getInicioAvancados(), 11); }
+    public int addJogadorComoAvancado(Player jog){ return tentaInserirTitular(jog, this.getInicioAvancados(), 11); }
 
     /** Remoçao da equipa **/
 
+    public Player removeJogador(int nrCamisola){
+        Player jog = null;
+
+        //Procura nos titulares
+        for(int i = 0 ; i < 11; i++){
+            jog = this.titulares[i];
+            if(jog != null && jog.getShirtNumber() == nrCamisola){
+                this.titulares[i] = null;
+                return jog;
+            }
+        }
+
+        //Procura nos suplentes
+        jog = this.suplentes.get(nrCamisola);
+        if(jog == null) return null;
+
+        this.suplentes.remove(nrCamisola);
+        return jog;
+    }
+
+    /*
     public Player removeJogador(String name){
         Player jog = null;
 
@@ -453,7 +515,7 @@ public class Equipa implements Team{
         }
 
         return null;
-    }
+    }*/
 
     /** Substituição de jogadores **/
 

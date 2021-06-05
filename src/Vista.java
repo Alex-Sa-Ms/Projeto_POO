@@ -65,6 +65,7 @@ public class Vista implements Observer {
                     opcao = MenuEquipas.getOpcao();
                     if(opcao != 0)
                         System.out.println(this.controlador.getEquipa(MenuEquipas.getStringOpcao(opcao))); //opcao - 1 corresponde ao indice do nome da equipa na lista fornecida
+                    Vista.esperaPermissaoParaContinuar();
                     break;
 
                 case 5:
@@ -77,6 +78,7 @@ public class Vista implements Observer {
                     opcao = MenuJogos.getOpcao();
                     if(opcao != 0)
                         System.out.println(this.controlador.getInfoJogo(opcao - 1));
+                    Vista.esperaPermissaoParaContinuar();
                     break;
 
                 case 7:
@@ -303,7 +305,7 @@ public class Vista implements Observer {
 
     //Retorna:
     //      -1 se o jogador pretender sair
-    //      0 se for feita uma troca entre titulares
+    //      0 se for feita uma troca entre titulares, ou se apenas tiver sido uma insercao numa posicao
     //      1 se for feita uma substituicao entre titular e suplente
     //Se inGame for true, significa que é uma troca no meio de um jogo
     private int substituicao(String nomeEquipa, boolean inGame){
@@ -322,10 +324,11 @@ public class Vista implements Observer {
         int numeroCamisolaASubstituir = this.controlador.getNumeroCamisolaJogador(opcao - 1, nomeEquipa);
 
         //Apresentacao dos jogadores da equipa
-        System.out.print("Jogadores de " + nomeEquipa + ":");
+        System.out.print("\n\nJogadores de " + nomeEquipa + ":\n");
         String[] jogadoresEquipa = this.controlador.getArrayInfoGenericaJogadores(nomeEquipa);
         for(String s : jogadoresEquipa)
-            System.out.println(s);
+            if(!s.equals(""))
+                System.out.println(s);
 
         //Numero de camisola do jogador que irá substituir o escolhido anteriormente
         Scanner sc = new Scanner(System.in);
@@ -339,14 +342,20 @@ public class Vista implements Observer {
         //Retorna 0 pq o utilizador pode simplesmente querer cancelar a substituicao
         if(numeroCamisolaSubstituto == -1) return 0;
 
-        return this.controlador.substituicao(numeroCamisolaASubstituir, numeroCamisolaSubstituto, nomeEquipa, inGame);
+        //Indica que nao existe jogador nessa posicao, logo nao se trata de uma substituicao mas de uma insercao numa dada posicao (index = opcao - 1)
+        //Esta situacao só acontece na selecao de jogadores para iniciar um jogo. Nunca no decorrer de uma partida!
+        if(numeroCamisolaASubstituir == -1){
+            this.controlador.insereJogador(opcao - 1, numeroCamisolaSubstituto, nomeEquipa);
+            return 0;
+        }
+        else
+            return this.controlador.substituicao(numeroCamisolaASubstituir, numeroCamisolaSubstituto, nomeEquipa, inGame);
     }
 
     //Retorna:
     // true se a equipa estiver pronta para jogar
     // false se o utilizador pretender sair
     private void substituicoes(String nomeEquipa, boolean inGame){
-        int r;
         while(substituicao(nomeEquipa,inGame) != -1);
     }
 

@@ -1,9 +1,10 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Random;
 
-public abstract class Jogador implements Player{
+public abstract class Jogador implements Player, Serializable {
     private String nome;
     private AreaDeJogo areaDeJogo;
     private int nrCamisola;

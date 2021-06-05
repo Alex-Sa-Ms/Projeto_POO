@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -5,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class InfoJogo {
+public class InfoJogo implements Serializable {
     private String equipaCasa;
     private String equipaFora;
     private LocalDate data;

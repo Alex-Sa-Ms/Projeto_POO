@@ -1,4 +1,6 @@
-public class Formacao {
+import java.io.Serializable;
+
+public class Formacao implements Serializable {
     private int nrDefesas;
     private int nrLaterais;
     private int nrMedios;

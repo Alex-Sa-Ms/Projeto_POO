@@ -70,6 +70,10 @@ public class Controlador extends Observable implements Observer {
         return this.catalogo.substituicao(numeroCamisolaASubstituir, numeroCamisolaSubstituto, nomeEquipa, inGame);
     }
 
+    public void insereJogador(int pos, int numeroCamisolaSubstituto, String nomeEquipa){
+        this.catalogo.insereJogador(pos, numeroCamisolaSubstituto, nomeEquipa);
+    }
+
     //Relativas aos jogos
 
     public String getInfoJogo(int index){
@@ -104,7 +108,7 @@ public class Controlador extends Observable implements Observer {
         Catalogo cat;
         int err = 0;
         try {
-            cat = Catalogo.carregaEstado(nomeFicheiro);
+            cat = Catalogo.carregaEstado(nomeFicheiro + ".fma");
         }
         catch (java.lang.ClassNotFoundException cnfe)
         {
@@ -120,6 +124,7 @@ public class Controlador extends Observable implements Observer {
         }
 
         this.catalogo = cat;
+        this.catalogo.addObserver(this);
         return 0;
     }
 
@@ -139,6 +144,7 @@ public class Controlador extends Observable implements Observer {
     public int lerEstadoLog(String nomeFicheiro){
         try {
             this.catalogo = Parser.parse(nomeFicheiro);
+            this.catalogo.addObserver(this);
             return 0;
         }
         catch (LinhaIncorretaException e){

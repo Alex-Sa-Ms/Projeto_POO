@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Jogo extends Observable {
+public class Jogo extends Observable implements Serializable {
 
     private final Team equipaCasa;
     private final Team equipaFora;
