@@ -12,15 +12,30 @@ import java.util.InputMismatchException;
 
 public class Menu {
     // variáveis de instância
+    private String titulo;
     private List<String> opcoes;
+    private List<Boolean> valid; //Usada para bloquear a escolha de certas opcoes
     private int op;
     
     /**
      * Constructor for objects of class Menu
      */
     public Menu(String[] opcoes) {
+        this.titulo = "Menu";
         this.opcoes = Arrays.asList(opcoes);
-        this.op = 0;
+        this.op     = 0;
+        this.valid  = new ArrayList<>();
+        for(int i = 0; i < this.opcoes.size() ; i++)
+            this.valid.add(true);
+    }
+
+    public Menu(String titulo, String[] opcoes){
+        this.titulo = titulo;
+        this.opcoes = Arrays.asList(opcoes);
+        this.op     = 0;
+        this.valid  = new ArrayList<>();
+        for(int i = 0; i < this.opcoes.size() ; i++)
+            this.valid.add(true);
     }
 
     /**
@@ -36,9 +51,12 @@ public class Menu {
     
     /** Apresentar o menu */
     private void showMenu() {
-        System.out.println("\n *** Menu *** ");
+        System.out.println("\n *** " + this.titulo + " *** ");
         for (int i=0; i<this.opcoes.size(); i++) {
-            System.out.print(i+1);
+            if(this.valid.get(i))
+                System.out.print(i+1);
+            else
+                System.out.print("*");
             System.out.print(" - ");
             System.out.println(this.opcoes.get(i));
         }
@@ -57,7 +75,7 @@ public class Menu {
         catch (InputMismatchException e) { // Não foi inscrito um int
             op = -1;
         }
-        if (op<0 || op>this.opcoes.size()) {
+        if (op<0 || op>this.opcoes.size() || (op > 0 && !this.valid.get(op - 1))) {
             System.out.println("Opção Inválida!!!");
             op = -1;
         }

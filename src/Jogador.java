@@ -120,6 +120,13 @@ public abstract class Jogador implements Player{
 
     public void setAreaDeJogo(AreaDeJogo areaDeJogo) { this.areaDeJogo = areaDeJogo; }
 
+    private void setRandomAreaDeJogo(){
+        int rand = new Random().nextInt(3);
+        if(rand == 0) this.areaDeJogo = AreaDeJogo.ESQUERDO;
+        else if (rand == 1) this.areaDeJogo = AreaDeJogo.CENTRO;
+        else this.areaDeJogo = AreaDeJogo.DIREITO;
+    }
+
     public void setShirtNumber(int nrCamisola) { this.nrCamisola = nrCamisola; }
 
     public void setPontuacaoGeral(){ this.pontuacaoGeral = this.calculaPontuacaoGeral(); }
@@ -210,5 +217,9 @@ public abstract class Jogador implements Player{
                 this.getStrike()         == jog.getStrike()         &&
                 this.getPasse()          == jog.getPasse()          &&
                 this.getHistorialClubes().equals(jog.getHistorialClubes());
+    }
+
+    public String getGenericInfo(){
+        return "Name: " + this.nome + " Shirt Number: " + this.nrCamisola + " Overall: " + this.pontuacaoGeral;
     }
 }

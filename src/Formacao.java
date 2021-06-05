@@ -15,8 +15,8 @@ public class Formacao {
     public Formacao() {
         this.nrDefesas   = 2;
         this.nrLaterais  = 2;
-        this.nrMedios    = 3;
-        this.nrAvancados = 3;
+        this.nrMedios    = 4;
+        this.nrAvancados = 2;
     }
 
     public Formacao(int nrDefesas, int nrLaterais, int nrMedios, int nrAvancados) {
@@ -64,5 +64,6 @@ public class Formacao {
         return new Formacao(this);
     }
 
-
+    //toString
+    public String toString(){ return this.nrDefesas + "-" + this.nrLaterais + "-" + this.nrMedios + "-" + this.nrAvancados;}
 }

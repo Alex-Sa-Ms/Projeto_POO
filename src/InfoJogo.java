@@ -16,28 +16,16 @@ public class InfoJogo {
     private Map<Integer, Integer> substituicoesCasa;
     private Map<Integer, Integer> substituicoesFora;
 
-    public InfoJogo() {
-        this.equipaCasa = "";
-        this.equipaFora = "";
-        this.data = LocalDate.now();
-        this.golosCasa = 0;
-        this.golosFora = 0;
-        this.jogadoresIniciaisCasa = new ArrayList<>();
-        this.jogadoresIniciaisFora = new ArrayList<>();
-        this.substituicoesCasa = new HashMap<>();
-        this.substituicoesFora = new HashMap<>();
-    }
-
-    public InfoJogo(String equipaCasa, String equipaFora, LocalDate data, int golosCasa, int golosFora, List<Integer> jogadoresIniciaisCasa, List<Integer> jogadoresIniciaisFora, Map<Integer, Integer> substituicoesCasa, Map<Integer, Integer> substituicoesFora) {
+    public InfoJogo(String equipaCasa, String equipaFora, LocalDate data, List<Integer> jogadoresIniciaisCasa, List<Integer> jogadoresIniciaisFora) {
         this.equipaCasa = equipaCasa;
         this.equipaFora = equipaFora;
         this.data = data;
-        this.golosCasa = golosCasa;
-        this.golosFora = golosFora;
+        this.golosCasa = 0;
+        this.golosFora = 0;
         this.jogadoresIniciaisCasa = new ArrayList<>(jogadoresIniciaisCasa);
         this.jogadoresIniciaisFora = new ArrayList<>(jogadoresIniciaisFora);
-        this.substituicoesCasa = substituicoesCasa.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        this.substituicoesFora = substituicoesFora.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        this.substituicoesCasa = new HashMap<>();
+        this.substituicoesFora = new HashMap<>();
     }
 
     public InfoJogo(InfoJogo ij){
@@ -50,10 +38,6 @@ public class InfoJogo {
         this.jogadoresIniciaisFora = ij.getJogadoresIniciaisFora();
         this.substituicoesCasa = ij.getSubstituicesCasa();
         this.substituicoesFora = ij.getSubstituicesFora();
-    }
-
-    public InfoJogo clone(){
-        return new InfoJogo(this);
     }
 
     //getters
@@ -121,11 +105,33 @@ public class InfoJogo {
         this.jogadoresIniciaisFora = new ArrayList<>(jogadoresIniciais);
     }
 
-    public void setSubstituicesCasa(Map<Integer, Integer> substituices) {
-        this.substituicoesCasa = substituices.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    public void newSubstituicaoCasa(int numeroCamisolaJogadorASubstituir, int numeroCamisolaJogadorSubstituto) {
+        this.substituicoesCasa.put(numeroCamisolaJogadorASubstituir, numeroCamisolaJogadorSubstituto);
     }
 
-    public void setSubstituicesFora(Map<Integer, Integer> substituices) {
-        this.substituicoesFora = substituices.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    public void newSubstituicaoFora(int numeroCamisolaJogadorASubstituir, int numeroCamisolaJogadorSubstituto) {
+        this.substituicoesFora.put(numeroCamisolaJogadorASubstituir, numeroCamisolaJogadorSubstituto);
+    }
+
+    //clone
+    public InfoJogo clone(){
+        return new InfoJogo(this);
+    }
+
+    //toString
+    public String getTituloJogo(){
+        return equipaCasa + " vs " + equipaFora + " (" + data + ")";
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(equipaCasa).append(" ").append(golosCasa).append(" - ").append(golosFora).append(" ").append(equipaFora).append("\n\n")
+          .append("Data: ").append(data).append("\n\n")
+          .append("Titulares (Equipa Casa): ").append(jogadoresIniciaisCasa).append("\n\n")
+          .append("Titulares (Equipa Fora): ").append(jogadoresIniciaisFora).append("\n\n")
+          .append("Substituicoes (Equipa Casa): ").append(substituicoesCasa).append("\n\n")
+          .append("Substituicoes (Equipa Fora): ").append(substituicoesFora).append("\n\n");
+
+        return sb.toString();
     }
 }

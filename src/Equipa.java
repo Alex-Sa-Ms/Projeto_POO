@@ -1,3 +1,4 @@
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,7 @@ public class Equipa implements Team{
         return this.suplentes.containsKey(nrCamisola);
     }
 
-    public boolean existeNaEquipa(Player jog){ return Arrays.stream(this.titulares).anyMatch(j -> j.equals(jog)) || existeEmSuplentes(jog);}
+    public boolean existeNaEquipa(Player jog){ return Arrays.asList(this.titulares).contains(jog) || existeEmSuplentes(jog);}
 
     public boolean existeNaEquipa(int nrCamisola){ return Arrays.stream(this.titulares).anyMatch(jog -> jog != null && jog.getShirtNumber() == nrCamisola)
                                                        || existeEmSuplentes(nrCamisola);
@@ -54,8 +55,9 @@ public class Equipa implements Team{
         //Maior número de camisola nos titulares
         int maxTitulares = 0;
         Player maxTitular = Arrays.stream(this.titulares)
-                                   .max(nrCamisolaComparator)
-                                   .orElse(null);
+                                  .filter(Objects::nonNull)
+                                  .max(nrCamisolaComparator)
+                                  .orElse(null);
         if(maxTitular != null) maxTitulares = maxTitular.getShirtNumber();
 
         //Maior número de camisola nos suplentes
@@ -118,6 +120,10 @@ public class Equipa implements Team{
     public String getName() { return this.nome; }
 
     public int getTeamOverall() { return this.pontuacaoGlobal; }
+
+    public Player getPlayer(int pos) {
+        return this.titulares[pos].Clone();
+    }
 
     // ** Funçoes sobre as Formacoes **
     public Formacao getFormacao() { return this.formacao.clone(); }
@@ -189,6 +195,9 @@ public class Equipa implements Team{
         }
     }
 
+    public int numberOfPlayers(){
+        return (int) (Arrays.stream(this.titulares).filter(Objects::nonNull).count() + this.suplentes.size());
+    }
 
     public Player[] getTitulares(){
         Player[] cloneArray = new Player[11];
@@ -285,15 +294,41 @@ public class Equipa implements Team{
     }
 
     private void setPontuacaoGlobal() {
+        Player jog;
         int somaPontuacoes = 0, pos;
 
         //Soma das pontuacoes gerais de cada jogador
         for(int i = 0; i < 11; i++) {
-            pos = this.getPosicao(i);
-            somaPontuacoes += this.titulares[i].getOverall(i, pos);
+            jog = this.titulares[i];
+            if(jog != null) {
+                pos = this.getPosicao(i);
+                somaPontuacoes += jog.getOverall(i, pos);
+            }
         }
 
         this.pontuacaoGlobal = (int) (somaPontuacoes / 11);
+    }
+
+    /** toString **/
+    /*
+        private String nome;
+    private int pontuacaoGlobal;
+    private Formacao formacao;
+
+    //Jogadores na lista de titulares são guardados pela seguinte ordem : Guarda-Redes -> Defesas -> Laterais -> Medios -> Avançados
+    //Os indices nos quais serão guardados dependem da formação
+    private Player[] titulares;
+    private Map<Integer,Player> suplentes;
+
+     */
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nome: ").append(this.nome).append("\n\n")
+          .append("Pontuacao Global: ").append(this.pontuacaoGlobal).append("\n\n")
+          .append("Formacao: ").append(this.formacao).append("\n\n")
+          .append("Titulares: ").append(Arrays.stream(this.titulares).filter(Objects::nonNull).map(Player::getName).collect(Collectors.toList())).append("\n\n")
+          .append("Suplentes: ").append(this.suplentes.values().stream().map(Player::getName).collect(Collectors.toList())).append("\n\n");
+        return sb.toString();
     }
 
     /** Inserção na equipa **/
@@ -312,6 +347,24 @@ public class Equipa implements Team{
     }
 
     private int getInicioAvancados(){ return 1 + formacao.getNrDefesas() + formacao.getNrLaterais() + formacao.getNrMedios(); }
+
+    //Esta funcao insere o jogador numa posicao especifica (dada pelo index que tem de ser entre 0(inclusive) e 10(inclusive))
+    //Caso já exista um jogador nessa posicao, este é movido para os suplentes
+    //Será retornado false se o jogador for 'null' ou se o index nao for válido
+    public boolean insertJogador(int index, Player player1){
+        if(index < 0 || index > 10 || player1 == null) return false;
+
+        //Referencia do objeto para inserir nos suplentes
+        Player player2 = this.titulares[index];
+
+        //Insercao do novo jogador
+        this.titulares[index] = player1.Clone();
+
+        //Insercao do jogador que foi substituido nos suplentes
+        this.suplentes.put(player2.getShirtNumber(), player2);
+
+        return true;
+    }
 
     //Esta função tenta inserir um jogador, que não exista na equipa, começando no indice 'index' fornecido até 'limite' - 1. Um jogador só é inserido numa posição null.
     //Retorna true caso consiga inserir, e false caso contrário.
@@ -334,16 +387,11 @@ public class Equipa implements Team{
         return false;
     }
 
-    //Tenta inserir jogador na primeira posicao livre que existir
-    private boolean tentaInserirTitular(Player jog){
-        return tentaInserirTitular(jog, 0, 11);
-    }
-
     //Retorna:
     //  false se já existirem 11 titulares, ou se o jogador for 'null'
     //  true se for adicionado com sucesso. É adicionado na primeira vaga.
     public boolean addJogadorTitular(Player jog){
-        return tentaInserirTitular(jog);
+        return tentaInserirTitular(jog, 0, 11);
     }
 
     //Retorna:
@@ -381,6 +429,31 @@ public class Equipa implements Team{
 
     public boolean addJogadorComoAvancado(Player jog){ return tentaInserirTitular(jog, this.getInicioAvancados(), 11); }
 
+    /** Remoçao da equipa **/
+
+    public Player removeJogador(String name){
+        Player jog = null;
+
+        //Procura nos titulares
+        for(int i = 0 ; i < 11; i++){
+            jog = this.titulares[i];
+            if(jog.getName().equals(name)){
+                this.titulares[i] = null;
+                return jog;
+            }
+        }
+
+        //Procura nos suplentes
+        for(Map.Entry<Integer,Player> entry : this.suplentes.entrySet()){
+            jog = entry.getValue();
+            if(jog.getName().equals(name)){
+                this.suplentes.remove(entry.getKey());
+                return jog;
+            }
+        }
+
+        return null;
+    }
 
     /** Substituição de jogadores **/
 
@@ -411,13 +484,26 @@ public class Equipa implements Team{
         return true;
     }
 
-    public void substituicao(int nrCamisolaJog1, int nrCamisolaJog2) throws substituicaoInvalidaException{
-        if(!trocaJogadoresTitulares(nrCamisolaJog1, nrCamisolaJog2))
-            if (!trocaTitularPorSuplente(nrCamisolaJog1, nrCamisolaJog2)) throw new substituicaoInvalidaException();
+    //Retorna:
+    //  0 se a troca for feita entre suplentes
+    //  1 se a troca for feita entre um titular e um suplente
+    public int substituicao(int nrCamisolaJog1, int nrCamisolaJog2){
+        int r = 0;
+
+        if(!trocaJogadoresTitulares(nrCamisolaJog1, nrCamisolaJog2)) {
+            r = 1;
+            if (!trocaTitularPorSuplente(nrCamisolaJog1, nrCamisolaJog2)) r = -1;
+        }
+
         this.setPontuacaoGlobal(); //Atualiza a Pontuacao Global
+        return r;
     }
 
     /** Verifica Equipa **/
+
+    public boolean jogadoresSuficientesParaJogar(){
+        return Arrays.stream(this.titulares).filter(Objects::nonNull).count() + this.suplentes.size() >= 11;
+    }
 
     public boolean prontaParaJogar(){
         return Arrays.stream(this.titulares).filter(Objects::nonNull).count() == 11;

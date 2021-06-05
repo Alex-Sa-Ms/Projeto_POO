@@ -37,4 +37,7 @@ public interface Player{
     int getStrike();
 
     int getHeadGame();
+
+    //String que retorna o nome, o número de camisola e o overall numa string
+    String getGenericInfo();
 }

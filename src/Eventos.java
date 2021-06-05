@@ -32,7 +32,7 @@ public class Eventos{
 
         if(aleatorio == 0) return new Eventos("Grande golo de " + jog + "!", time);
         else if(aleatorio == 1) return new Eventos("Golo! Mas que finalização de" + jog + "!", time);
-        else return new Eventos("Inacreditável! Fantástico remate de " + jog + "!", time);
+        else return new Eventos("Inacreditável! Mas que golo! Fantástico remate de " + jog + "!", time);
     }
 
     public static Eventos getFailedStrikeEvent(String jog, int time){
@@ -89,8 +89,10 @@ public class Eventos{
         return new Eventos ("A segunda parte do jogo começou!", time);
     }
 
-    public static Eventos getFinishEvent(int time){
-        return new Eventos ("O jogo terminou!", time);
+    public static Eventos getFinishEvent(int time, int golosCasa, int golosFora, String nomeEquipaCasa, String nomeEquipaFora){
+        if(golosCasa == golosFora) return new Eventos ("O jogo terminou com o empate entre as duas equipas!\nResultado: " + golosCasa + " - " + golosFora, time);
+        else if(golosCasa > golosFora) return new Eventos ("O jogo terminou com uma grande vitória de " + nomeEquipaCasa + "!\nResultado: " + golosCasa + " - " + golosFora, time);
+        else return new Eventos ("O jogo terminou com a vitória de " + nomeEquipaFora + "!\nResultado: " + golosCasa + " - " + golosFora, time);
     }
 
     public static Eventos getFinish1PartEvent(int time){
@@ -99,5 +101,9 @@ public class Eventos{
 
     public static Eventos getSwapEvent(String jog, String sub, int time){
         return new Eventos("Jogador " + jog + " é substituido por " + sub + "!", time);
+    }
+
+    public String toString(){
+        return tempo + "' " + this.descricao;
     }
 }
