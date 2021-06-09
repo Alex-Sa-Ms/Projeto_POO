@@ -27,6 +27,8 @@ public class Controlador extends Observable implements Observer {
 
     //Relativas ás equipas
 
+    public boolean existeEquipa(String nomeEquipa) { return this.catalogo.existeEquipa(nomeEquipa); }
+
     public String getEquipa(String nomeEquipa){
         return this.catalogo.getEquipaString(nomeEquipa);
     }
@@ -54,12 +56,16 @@ public class Controlador extends Observable implements Observer {
         return this.catalogo.getArrayInfoGenericaTitulares(nomeEquipa, inGame);
     }
 
+    public String[] getArrayInfoGenericaSuplentes(String nomeEquipa, boolean inGame){
+        return this.catalogo.getArrayInfoGenericaSuplentes(nomeEquipa, inGame);
+    }
+
     public String[] getArrayInfoGenericaJogadores(String nomeEquipa){
         return this.catalogo.getArrayInfoGenericaJogadores(nomeEquipa);
     }
 
-    public int getNumeroCamisolaJogador(int index, String nomeEquipa){
-        return this.catalogo.getNumeroCamisolaJogador(index,nomeEquipa);
+    public int getNumeroCamisolaJogador(int index, String nomeEquipa, boolean inGame){
+        return this.catalogo.getNumeroCamisolaJogador(index, nomeEquipa, inGame);
     }
 
     public boolean numeroCamisolaJogadorValido(int numeroCamisola, String nomeEquipa){
@@ -144,11 +150,12 @@ public class Controlador extends Observable implements Observer {
     public int lerEstadoLog(String nomeFicheiro){
         try {
             this.catalogo = Parser.parse(nomeFicheiro);
+            if(this.catalogo == null) return 1;
             this.catalogo.addObserver(this);
             return 0;
         }
         catch (LinhaIncorretaException e){
-            return 1;
+            return 2;
         }
     }
 }

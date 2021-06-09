@@ -39,5 +39,7 @@ public interface Player{
     int getHeadGame();
 
     //String que retorna o nome, o número de camisola e o overall numa string
-    String getGenericInfo();
+    default String getGenericInfo(){
+        return "Name: " + this.getName() + "   Shirt Number: " + this.getShirtNumber() + "   Overall: " + this.getOverall();
+    }
 }

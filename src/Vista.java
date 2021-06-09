@@ -57,7 +57,7 @@ public class Vista implements Observer {
                     break;
 
                 case 3:
-                    this.controlador.criaEquipa(Vista.getParametrosEquipa());
+                    this.controlador.criaEquipa(this.getParametrosEquipa());
                     break;
 
                 case 4:
@@ -73,7 +73,7 @@ public class Vista implements Observer {
                     break;
 
                 case 6:
-                    MenuJogos = new Menu(this.controlador.getArrayNomesJogos());
+                    MenuJogos = new Menu("Histórico de jogos",this.controlador.getArrayNomesJogos());
                     MenuJogos.executa();
                     opcao = MenuJogos.getOpcao();
                     if(opcao != 0)
@@ -101,10 +101,14 @@ public class Vista implements Observer {
                     else
                         System.out.println("Devido a algum erro não foi possível gravar os dados!");
                     break;
+
                 case 9:
                     System.out.print("Introduza o nome do ficheiro(log) do qual pretende ler o estado: ");
-                    if(this.controlador.lerEstadoLog(new Scanner(System.in).nextLine()) == 0)
+                    code = this.controlador.carregaEstado(new Scanner(System.in).nextLine());
+                    if(code == 0)
                         System.out.println("Estado lido com sucesso!");
+                    else if(code == 1)
+                        System.out.println("Não foi possível ler os dados! Verifique o nome do ficheiro.");
                     else
                         System.out.println("Não foi possível ler o ficheiro! Ficheiro mal formatado!");
                     break;
@@ -247,13 +251,18 @@ public class Vista implements Observer {
 
     /** Criar Equipas **/
 
-    public static String[] getParametrosEquipa(){
+    public String[] getParametrosEquipa(){
         String[] parametros = new String[5]; //Espaço para o nome, e o número de jogadores de cada posicao, ou seja, a formacao
         Scanner sc = new Scanner(System.in);
 
         // Nome
         System.out.print("Nome: ");
         parametros[0] = sc.nextLine();
+
+        while (this.controlador.existeEquipa(parametros[0])){
+            System.out.print("Já existe uma equipa com este nome! Insira um novo nome: ");
+            parametros[0] = sc.nextLine();
+        }
 
         // Menu de Formacoes
         String[] formacoes = {"2-2-4-2", "2-2-5-1", "2-2-3-3" , "3-0-5-2"};
@@ -279,12 +288,13 @@ public class Vista implements Observer {
             parametros[3] = "3";
             parametros[4] = "3";
         }
-        else{
+        else if(opcao == 4){
             parametros[1] = "3";
             parametros[2] = "0";
             parametros[3] = "5";
             parametros[4] = "2";
         }
+        else return null;
 
         return parametros;
     }
@@ -321,12 +331,12 @@ public class Vista implements Observer {
         //Sai se for escolhida a opcao "Sair"
         if(opcao == 0) return -1;
 
-        int numeroCamisolaASubstituir = this.controlador.getNumeroCamisolaJogador(opcao - 1, nomeEquipa);
+        int numeroCamisolaASubstituir = this.controlador.getNumeroCamisolaJogador(opcao - 1, nomeEquipa, inGame);
 
         //Apresentacao dos jogadores da equipa
         System.out.print("\n\nJogadores de " + nomeEquipa + ":\n");
-        String[] jogadoresEquipa = this.controlador.getArrayInfoGenericaJogadores(nomeEquipa);
-        for(String s : jogadoresEquipa)
+        String[] suplentes = this.controlador.getArrayInfoGenericaSuplentes(nomeEquipa, inGame);
+        for(String s : suplentes)
             if(!s.equals(""))
                 System.out.println(s);
 
@@ -335,9 +345,9 @@ public class Vista implements Observer {
         int numeroCamisolaSubstituto;
 
         do{
-            System.out.println("Introduza o número de camisola do jogador substituto (-1 se pretender sair): ");
+            System.out.println("Introduza o número de camisola do jogador substituto (Pode ser um titular), ou -1 se pretender sair): ");
             numeroCamisolaSubstituto = sc.nextInt();
-        }while (numeroCamisolaSubstituto != -1 && !this.controlador.numeroCamisolaJogadorValido(numeroCamisolaSubstituto, nomeEquipa));
+        }while(!(numeroCamisolaSubstituto == -1 || (this.controlador.numeroCamisolaJogadorValido(numeroCamisolaSubstituto, nomeEquipa) && numeroCamisolaASubstituir != numeroCamisolaSubstituto)));
 
         //Retorna 0 pq o utilizador pode simplesmente querer cancelar a substituicao
         if(numeroCamisolaSubstituto == -1) return 0;

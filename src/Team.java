@@ -21,6 +21,9 @@ public interface Team {
 
     List<AbstractMap.SimpleEntry<Player,Integer>> getStrikers();
 
+    //Retorna:
+    //  0 se a troca for feita entre suplentes
+    //  1 se a troca for feita entre um titular e um suplente
     int substituicao(int numeroCamisolaASubstituir, int numeroCamisolaSubstituto);
 
     int numberOfPlayers();

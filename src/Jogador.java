@@ -222,8 +222,4 @@ public abstract class Jogador implements Player, Serializable {
                 this.getPasse()          == jog.getPasse()          &&
                 this.getHistorialClubes().equals(jog.getHistorialClubes());
     }
-
-    public String getGenericInfo(){
-        return "Name: " + this.nome + " Shirt Number: " + this.nrCamisola + " Overall: " + this.pontuacaoGeral;
-    }
 }

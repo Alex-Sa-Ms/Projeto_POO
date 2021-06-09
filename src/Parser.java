@@ -10,6 +10,7 @@ import java.util.Map;
 public class Parser {
     public static Catalogo parse(String nomeFicheiro) throws LinhaIncorretaException {
         List<String> linhas = lerFicheiro(nomeFicheiro);
+        if(linhas.size() == 0) return null;
         Catalogo catalogo = new Catalogo();
         String ultima = null; Jogador j = null;
         String[] linhaPartida;

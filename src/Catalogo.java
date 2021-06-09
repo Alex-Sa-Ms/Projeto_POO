@@ -262,11 +262,17 @@ public class Catalogo extends Observable implements Observer, Serializable {
     }
 
     public void criaEquipa(String[] parametros){
-        Equipa equipa = new Equipa(parametros[0], Integer.parseInt(parametros[1]), Integer.parseInt(parametros[2]), Integer.parseInt(parametros[3]), Integer.parseInt(parametros[4]));
-        this.addEquipa(equipa);
+        if(parametros != null){
+            Equipa equipa = new Equipa(parametros[0], Integer.parseInt(parametros[1]), Integer.parseInt(parametros[2]), Integer.parseInt(parametros[3]), Integer.parseInt(parametros[4]));
+            this.addEquipa(equipa);
+        }
     }
 
     /** Equipa **/
+
+    public boolean existeEquipa(String nomeEquipa){
+        return this.equipas.get(nomeEquipa) != null;
+    }
 
     public boolean mudaJogadorDeEquipa(int index, String nomeEquipa){
         //Verifica se a equipa existe
@@ -324,26 +330,9 @@ public class Catalogo extends Observable implements Observer, Serializable {
         return equipa != null && equipa.prontaParaJogar();
     }
 
-    public String[] getArrayInfoGenericaTitulares(String nomeEquipa, boolean inGame){
-        Equipa equipa;
-
-        if(!inGame)
-            equipa = this.equipas.get(nomeEquipa);
-        else
-            equipa = (Equipa) this.novoJogo.getEquipa(nomeEquipa);
-
-        String[] infosGenericas = new String[11];
-        String aux;
-        int index = 0;
-
-        for(Player player : equipa.getTitulares()) {
-            if(player == null) aux = "";
-            else aux = player.getGenericInfo();
-
-            infosGenericas[index++] = aux;
-        }
-
-        return infosGenericas;
+    public void insereJogador(int pos, int numeroCamisolaSubstituto, String nomeEquipa){
+        Equipa equipa = this.equipas.get(nomeEquipa);
+        equipa.insertJogador(pos, numeroCamisolaSubstituto);
     }
 
     public String[] getArrayInfoGenericaJogadores(String nomeEquipa){
@@ -365,18 +354,56 @@ public class Catalogo extends Observable implements Observer, Serializable {
         return infosGenericas;
     }
 
-    //Retorna -1 se nao existir jogador para aquela posicao
-    public int getNumeroCamisolaJogador(int index, String nomeEquipa){
-        Equipa equipa = this.equipas.get(nomeEquipa);
-        Player player = equipa.getPlayer(index);
-
-        if(player == null) return -1;
-        else return equipa.getPlayer(index).getShirtNumber();
-    }
-
     public boolean numeroCamisolaJogadorValido(int numeroCamisola, String nomeEquipa){
         Equipa equipa = this.equipas.get(nomeEquipa);
         return equipa.existeNaEquipa(numeroCamisola);
+    }
+
+    /** Funcoes com comportamento fora de jogo diferente do dentro de jogo **/
+
+    public Equipa getEquipa(String nomeEquipa, boolean inGame){
+        if(!inGame)
+            return this.equipas.get(nomeEquipa);
+        else
+            return (Equipa) this.novoJogo.getEquipa(nomeEquipa);
+    }
+
+    public String[] getArrayInfoGenericaTitulares(String nomeEquipa, boolean inGame){
+        Equipa equipa = getEquipa(nomeEquipa, inGame);
+
+        String[] infosGenericas = new String[11];
+        String aux;
+        int index = 0;
+
+        for(Player player : equipa.getTitulares()) {
+            if(player == null) aux = "";
+            else aux = player.getGenericInfo();
+
+            infosGenericas[index++] = aux;
+        }
+
+        return infosGenericas;
+    }
+
+    public String[] getArrayInfoGenericaSuplentes(String nomeEquipa, boolean inGame){
+        Equipa equipa = getEquipa(nomeEquipa, inGame);
+
+        String[] infosGenericas = new String[equipa.numberOfReplacements()];
+
+        int index = 0;
+
+        for(Player player : equipa.getSuplentes().values())
+            infosGenericas[index++] = player.getGenericInfo();
+
+        return infosGenericas;
+    }
+
+    //Retorna -1 se nao existir jogador para aquela posicao
+    public int getNumeroCamisolaJogador(int index, String nomeEquipa, boolean inGame){
+        Equipa equipa = this.getEquipa(nomeEquipa, inGame);
+        Player player = equipa.getPlayer(index);
+        if(player == null) return -1;
+        else return equipa.getPlayer(index).getShirtNumber();
     }
 
     public int substituicao(int numeroCamisolaASubstituir, int numeroCamisolaSubstituto, String nomeEquipa, boolean inGame){
@@ -390,11 +417,6 @@ public class Catalogo extends Observable implements Observer, Serializable {
         }
 
         return r;
-    }
-
-    public void insereJogador(int pos, int numeroCamisolaSubstituto, String nomeEquipa){
-        Equipa equipa = this.equipas.get(nomeEquipa);
-        equipa.insertJogador(pos, numeroCamisolaSubstituto);
     }
 
     /** InfoJogo **/

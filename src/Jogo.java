@@ -56,24 +56,25 @@ public class Jogo extends Observable implements Serializable {
 
     /** substituicao **/
 
+    //Retorna:
+    //  -1 caso o número de substituicoes atingir o limite
+    //   0 se a troca for feita entre suplentes
+    //   1 se a troca for feita entre um titular e um suplente
     public int substituicao(int numeroCamisolaASubstituir, int numeroCamisolaSubstituto, String nomeEquipa){
-        Team equipa;
         int r = -1;
 
         if(nomeEquipa.equals(this.equipaCasa.getName()) && this.substituicoesCasa < 3) {
-            equipa = equipaCasa;
             this.resumoJogo.newSubstituicaoCasa(numeroCamisolaASubstituir,numeroCamisolaSubstituto);
-            r = equipa.substituicao(numeroCamisolaASubstituir, numeroCamisolaSubstituto);
-            this.substituicoesCasa += r;
+            r = this.equipaCasa.substituicao(numeroCamisolaASubstituir, numeroCamisolaSubstituto);
 
+            this.substituicoesCasa += r;
             if(this.substituicoesCasa == 3) return -1;
         }
         else if(nomeEquipa.equals(this.equipaFora.getName()) && this.substituicoesFora < 3) {
-            equipa = equipaFora;
             this.resumoJogo.newSubstituicaoFora(numeroCamisolaASubstituir,numeroCamisolaSubstituto);
-            r = equipa.substituicao(numeroCamisolaASubstituir, numeroCamisolaSubstituto);
-            this.substituicoesFora += r;
+            r = this.equipaFora.substituicao(numeroCamisolaASubstituir, numeroCamisolaSubstituto);
 
+            this.substituicoesFora += r;
             if(this.substituicoesFora == 3) return -1;
         }
 
